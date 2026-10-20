@@ -3,9 +3,8 @@
 Sells sponsor slots on an Ironman trisuit. Modelled on
 [hyrox.marclou.com](https://hyrox.marclou.com) — a rotatable suit with clickable
 slots, tiered pricing, per-slot view counts and a live visitor ticker — but
-built from flat studio renders rather than a 3D model, and pointed at Indian
-sponsors paying in rupees through an enquiry-and-invoice flow rather than a
-checkout.
+pointed at Indian sponsors paying in rupees through an enquiry-and-invoice flow
+rather than a checkout.
 
 ```bash
 npm install
@@ -78,44 +77,44 @@ route, never the browser.
 
 ## How the viewer works
 
-The reference site renders a Draco-compressed GLB through React Three Fiber.
-This one does not, and gets most of the way there from four flat images.
+Real 3D, via React Three Fiber — the suit orbits freely, the same as the
+reference site.
 
-**The plate.** `scripts/cut-suit-views.py` cuts four views out of a studio
-render collage and composites them onto one shared 940 × 1380 canvas, so all
-four sit in the same coordinate space. That shared canvas is what makes the spin
-register and what lets one set of slot coordinates work across every view.
-Output: `public/suit/{front,three-quarter,side,back}.webp`.
+**The model.** `public/models/trisuit.glb`, one mesh, ~141k verts, with normals
+and UVs. `SuitModel` normalises it on load — centred on the origin, scaled to a
+fixed height — so slot anchors survive a re-export at a different scale.
 
-**The logos.** Each slot stores four corner points per view in normalised
-0–1 canvas space. `lib/geometry.ts` solves the homography mapping a unit square
-onto those corners and emits a CSS `matrix3d`, so the logo follows the body's
-curve. `mix-blend-mode: multiply` lets the fabric's shading through on the white
-jersey; the black bib panels use `screen` instead, because multiply would erase
-the mark entirely (see `DARK_PANEL` in `SlotDecal.tsx`).
+> The GLB is gitignored (12 MB). Draco-compress it before launch; the reference
+> site ships its model that way.
 
-**The camera.** Clicking a slot springs the stage's scale and translate so the
-slot's longest side fills about a quarter of the plate width, parked off-centre
-so the detail card does not cover it. Markers counter-scale by `1 / cameraScale`
-so dots and labels keep a constant size on screen.
+**The logos.** `SlotDecal3D` uses `DecalGeometry`, which clips the target's
+triangles against a projector box. That needs **no UV layout**, which is what
+makes it safe on a generated mesh whose UVs are usually a mess.
+
+One subtlety worth keeping: `DecalGeometry` projects through `mesh.matrixWorld`,
+and immediately after mount three has not refreshed the world matrices yet. The
+decals come out degenerate unless `updateMatrixWorld(true)` runs first — see the
+comment in `SuitModel.tsx`.
+
+**The camera.** Clicking a slot eases the camera onto it via `CameraRig`, then
+hands control back to `OrbitControls`. The viewpoint is derived from the
+anchor's own orientation (`lib/slotCamera.ts`), so there is no per-slot camera
+data to keep in sync.
+
+**No `<Environment preset>`.** drei fetches its HDRs from an external CDN, and a
+failed fetch suspends the whole subtree — which silently blanks the hero. The
+chamber is emissive neon plus explicit lights instead.
 
 ### Moving a slot
 
-Edit its `placement` quad in `content/slots.ts`. Corners are clockwise from
-top-left, in fractions of the plate. To find values, overlay a percentage grid
-on `public/suit/front.webp` and read them off — that is how the current ones
-were set.
+Run the dev server and open **`/lab`**. Pick a slot, click that spot on the
+suit, and the anchor moves there. It starts from whatever is baked into
+`content/slots.ts`, keeps your edits in `localStorage` across reloads, and the
+Copy JSON button gives you the block to paste back into `content/slots.ts`.
 
-### Swapping in a real 3D model
-
-The viewer is isolated behind `components/suit/SuitStage.tsx`. A React Three
-Fiber scene can replace it without touching the slot data, the panels or the
-API, as long as it accepts the same props and reports the same slot ids.
-
-Note: the `.glb` currently in `~/Downloads` is **not a model** — it is 768 KB of
-Meshy's download page HTML. Re-export it if you want to go this route.
-
----
+Clicking beats typing coordinates because the raycast returns the hit point
+*and* the surface normal together, and the normal is exactly the projector
+orientation. The spin slider rotates a decal within the surface plane.
 
 ## Routes
 

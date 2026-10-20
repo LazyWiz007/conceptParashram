@@ -1,5 +1,8 @@
 # Asset pipeline
 
+> `cut-suit-views.py` fed the retired 2.5D viewer and is no longer part of the
+> build. Kept because the cut-outs are still useful for press shots and decks.
+
 Both scripts need Pillow and numpy (`pip3 install pillow numpy`).
 
 ## cut-suit-views.py
