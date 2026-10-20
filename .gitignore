@@ -40,3 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 !.env.example
+
+# the trisuit source model is large; keep it out of git until it is Draco-compressed
+public/models/*.glb
