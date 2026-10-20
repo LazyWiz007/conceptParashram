@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { quadBounds, quadCentroid, svgPolygonPoints } from "@/lib/geometry";
-import { useSize } from "@/lib/useSize";
+import { useMediaQuery, useSize } from "@/lib/useSize";
 import { VIEW_ORDER, type Slot, type ViewId } from "@/lib/types";
 import { SlotDecal } from "./SlotDecal";
 import { SlotMarker } from "./SlotMarker";
@@ -31,6 +31,7 @@ export function SuitStage({
   setHoveredId: (id: string | null) => void;
 }) {
   const [plateRef, size] = useSize<HTMLDivElement>();
+  const isWide = useMediaQuery("(min-width: 640px)");
   const drag = useRef<{ x: number; active: boolean; moved: boolean }>({
     x: 0,
     active: false,
@@ -54,19 +55,29 @@ export function SuitStage({
     [slots, view],
   );
 
-  // camera: centre and scale onto the focused slot
+  /**
+   * Camera: centre the focused slot and push in — but only enough to read it.
+   * The slot is parked off-centre so the detail card (right on desktop, bottom
+   * sheet on mobile) does not sit on top of the thing it describes.
+   */
   const camera = useMemo(() => {
     const quad = focused?.placement[view];
     if (!focused || !quad) return { scale: 1, x: "0%", y: "0%" };
     const [cx, cy] = quadCentroid(quad);
-    const [, , , qh] = quadBounds(quad);
-    const scale = Math.min(3.4, Math.max(1.7, 0.42 / Math.max(qh, 0.04)));
+    const [, , qw, qh] = quadBounds(quad);
+    // Push in until the slot's longest side is about a quarter of the plate's
+    // width on screen. The plate is taller than it is wide, so normalised
+    // heights have to be rescaled before the two can be compared.
+    const longest = Math.max(qw, qh * (PLATE_H / PLATE_W));
+    const scale = Math.min(2.2, Math.max(1.4, 0.26 / Math.max(longest, 0.08)));
+    const targetX = isWide ? 0.37 : 0.5;
+    const targetY = isWide ? 0.5 : 0.34;
     return {
       scale,
-      x: `${(-(cx - 0.5) * 100 * scale).toFixed(2)}%`,
-      y: `${(-(cy - 0.5) * 100 * scale).toFixed(2)}%`,
+      x: `${((targetX - cx) * 100 * scale).toFixed(2)}%`,
+      y: `${((targetY - cy) * 100 * scale).toFixed(2)}%`,
     };
-  }, [focused, view]);
+  }, [focused, view, isWide]);
 
   // focusing a slot rotates to the view that shows it best
   useEffect(() => {
@@ -87,17 +98,25 @@ export function SuitStage({
   const onPointerDown = (e: React.PointerEvent) => {
     if (focusedId) return;
     drag.current = { x: e.clientX, active: true, moved: false };
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    // deliberately no setPointerCapture here: capturing on pointerdown retargets
+    // the click away from the slot markers, so taps would never select a slot.
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
     if (!drag.current.active) return;
     const dx = e.clientX - drag.current.x;
-    if (Math.abs(dx) >= DRAG_STEP) {
-      step(dx < 0 ? 1 : -1);
-      drag.current.x = e.clientX;
-      drag.current.moved = true;
+    if (Math.abs(dx) < DRAG_STEP) return;
+    // a real drag has started — now it is safe to capture
+    if (!drag.current.moved) {
+      try {
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+      } catch {
+        /* capture is a nicety, not a requirement */
+      }
     }
+    step(dx < 0 ? 1 : -1);
+    drag.current.x = e.clientX;
+    drag.current.moved = true;
   };
 
   const endDrag = (e: React.PointerEvent) => {
@@ -107,6 +126,8 @@ export function SuitStage({
     } catch {
       /* pointer already gone */
     }
+    // let the click that follows this drag be swallowed, then re-arm
+    if (drag.current.moved) setTimeout(() => (drag.current.moved = false), 0);
   };
 
   const { width: w, height: h } = size;
@@ -200,6 +221,8 @@ export function SuitStage({
               quad={s.placement[view]!}
               active={focusedId === s.id || hoveredId === s.id}
               dimmed={Boolean(focusedId) && focusedId !== s.id}
+              counterScale={1 / camera.scale}
+              showLabel={!focusedId}
               onEnter={() => setHoveredId(s.id)}
               onLeave={() => setHoveredId(null)}
               onSelect={() => {
@@ -216,7 +239,7 @@ export function SuitStage({
 
       {/* rotate control */}
       <div
-        className={`pointer-events-auto absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full border border-[var(--line)] bg-[var(--panel)] px-1.5 py-1.5 backdrop-blur transition-opacity ${
+        className={`pointer-events-auto absolute bottom-0 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full border border-[var(--line)] bg-[var(--panel)] px-1.5 py-1.5 backdrop-blur transition-opacity ${
           focusedId ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >

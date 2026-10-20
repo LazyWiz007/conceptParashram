@@ -10,6 +10,8 @@ export function SlotMarker({
   quad,
   active,
   dimmed,
+  counterScale,
+  showLabel,
   onEnter,
   onLeave,
   onSelect,
@@ -18,6 +20,9 @@ export function SlotMarker({
   quad: Quad;
   active: boolean;
   dimmed: boolean;
+  /** Undoes the stage zoom so dots and labels keep a constant screen size. */
+  counterScale: number;
+  showLabel: boolean;
   onEnter: () => void;
   onLeave: () => void;
   onSelect: () => void;
@@ -43,7 +48,11 @@ export function SlotMarker({
         transition: "opacity 240ms ease",
       }}
     >
-      <span className="relative grid h-7 w-7 place-items-center">
+      <span
+        className="relative grid place-items-center"
+        style={{ scale: String(counterScale), transition: "scale 240ms ease" }}
+      >
+        <span className="relative grid h-7 w-7 place-items-center">
         {!taken && (
           <span
             className="pulse-ring absolute inset-0 rounded-full"
@@ -63,7 +72,7 @@ export function SlotMarker({
       <span
         className="pointer-events-none absolute left-1/2 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap rounded-md border border-[var(--line)] bg-[var(--panel)] px-2 py-1 font-mono text-[10px] uppercase tracking-[0.12em] backdrop-blur transition-all duration-200"
         style={{
-          opacity: active ? 1 : 0,
+          opacity: active && showLabel ? 1 : 0,
           transform: `translate(-50%, ${active ? "0" : "-4px"})`,
           color: taken ? "var(--ink-dim)" : "var(--ink)",
         }}
@@ -72,6 +81,7 @@ export function SlotMarker({
         <span className="ml-2" style={{ color: taken ? "var(--sold)" : tier }}>
           {taken ? "taken" : inr(slot.price)}
         </span>
+      </span>
       </span>
     </button>
   );
