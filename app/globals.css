@@ -1,26 +1,262 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* chamber */
+  --void: #03070d;
+  --void-2: #061018;
+  --grid: 56 189 248;
+  --haze: 34 211 238;
+
+  --ink: #e6f2fb;
+  --ink-dim: #8aa2b8;
+  --ink-faint: #4b6075;
+
+  --line: rgb(56 189 248 / 0.16);
+  --line-strong: rgb(56 189 248 / 0.4);
+  --panel: rgb(6 18 28 / 0.86);
+
+  /* tiers */
+  --tier-title: #d9f03c;
+  --tier-prime: #22d3ee;
+  --tier-core: #818cf8;
+  --tier-support: #7c93a8;
+
+  --sold: #64748b;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-void: var(--void);
+  --color-void-2: var(--void-2);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --color-ink-faint: var(--ink-faint);
+  --color-line: var(--line);
+  --color-panel: var(--panel);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  min-width: 0;
+}
+
+html {
+  background: var(--void);
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ---------- the chamber ---------- */
+
+.chamber {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 80% at 50% 8%, rgb(12 42 62 / 0.9) 0%, transparent 60%),
+    radial-gradient(90% 60% at 50% 100%, rgb(8 30 48 / 0.8) 0%, transparent 65%),
+    linear-gradient(180deg, var(--void) 0%, var(--void-2) 55%, var(--void) 100%);
+}
+
+/* receding floor */
+.chamber-floor {
+  position: absolute;
+  left: -60%;
+  right: -60%;
+  bottom: -14%;
+  height: 62%;
+  transform: perspective(520px) rotateX(74deg);
+  transform-origin: 50% 100%;
+  background-image:
+    repeating-linear-gradient(to right, rgb(var(--grid) / 0.75) 0 2px, transparent 2px 68px),
+    repeating-linear-gradient(to bottom, rgb(var(--grid) / 0.6) 0 2px, transparent 2px 68px);
+  mask-image: radial-gradient(60% 82% at 50% 100%, #000 4%, transparent 84%);
+  opacity: 0.6;
+}
+
+/* back wall */
+.chamber-wall {
+  position: absolute;
+  inset: 0 0 38% 0;
+  background-image:
+    repeating-linear-gradient(to right, rgb(var(--grid) / 0.3) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(to bottom, rgb(var(--grid) / 0.22) 0 1px, transparent 1px 96px);
+  mask-image: radial-gradient(70% 80% at 50% 58%, #000 0%, transparent 72%);
+  opacity: 0.6;
+}
+
+/* the spotlight the suit hangs in */
+.chamber-glow {
+  position: absolute;
+  left: 50%;
+  top: 46%;
+  width: min(760px, 86vw);
+  aspect-ratio: 1 / 1.25;
+  translate: -50% -50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(var(--haze) / 0.42) 0%,
+    rgb(var(--haze) / 0.16) 44%,
+    transparent 74%
+  );
+  filter: blur(26px);
+  pointer-events: none;
+}
+
+.chamber-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 95% at 50% 42%, transparent 40%, rgb(0 0 0 / 0.86) 100%);
+  pointer-events: none;
+}
+
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgb(var(--haze) / 0.045) 0 1px,
+    transparent 1px 4px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ---------- decals ---------- */
+
+.decal-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-style: preserve-3d;
+}
+
+.decal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* the logo is multiplied into the fabric so folds and seams cut across it */
+.decal-art {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  opacity: 0.93;
+}
+
+/* on the black bib panels, multiply would erase the mark — screen it instead */
+.decal--dark .decal-art {
+  mix-blend-mode: screen;
+  opacity: 0.95;
+}
+
+.hairline {
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* chrome-less scrollbar inside panels */
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--grid) / 0.3) transparent;
+}
+.scroll-slim::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-slim::-webkit-scrollbar-thumb {
+  background: rgb(var(--grid) / 0.3);
+  border-radius: 99px;
+}
+
+@keyframes pulse-ring {
+  0% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2.6s cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-ring {
+    animation: none;
+  }
+}
+
+
+/* light pillars down the side walls, like the reference chamber */
+.chamber-pillars {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to bottom, transparent 6%, rgb(var(--haze) / 0.5) 30%, rgb(var(--haze) / 0.5) 62%, transparent 82%),
+    linear-gradient(to bottom, transparent 6%, rgb(var(--haze) / 0.5) 30%, rgb(var(--haze) / 0.5) 62%, transparent 82%),
+    linear-gradient(to bottom, transparent 14%, rgb(var(--haze) / 0.26) 34%, transparent 70%),
+    linear-gradient(to bottom, transparent 14%, rgb(var(--haze) / 0.26) 34%, transparent 70%);
+  background-size: 2px 100%, 2px 100%, 2px 100%, 2px 100%;
+  background-position: 8% 0, 92% 0, 20% 0, 80% 0;
+  background-repeat: no-repeat;
+  filter: blur(0.5px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* the suit's reflection on the chamber floor */
+.suit-reflection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 46%;
+  transform: scaleY(-1);
+  transform-origin: top;
+  mask-image: linear-gradient(to top, transparent 4%, rgb(0 0 0 / 0.42) 70%);
+  filter: blur(2px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* faint pedestal the suit stands on */
+.chamber-pad {
+  position: absolute;
+  left: 50%;
+  bottom: 11%;
+  width: min(560px, 72vw);
+  aspect-ratio: 4 / 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--haze) / 0.22) 0%, transparent 72%);
+  box-shadow: inset 0 0 0 1px rgb(var(--grid) / 0.3);
+  pointer-events: none;
 }
