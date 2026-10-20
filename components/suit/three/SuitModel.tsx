@@ -55,9 +55,14 @@ export function SuitModel({
   }, [scene, targetHeight]);
 
   useEffect(() => {
-    if (mesh && onReady) onReady(mesh);
+    if (!mesh || !onReady) return;
+    // DecalGeometry projects through mesh.matrixWorld. Straight after mount
+    // three has not refreshed the world matrices yet, so without this the
+    // decals are built against an identity transform and come out degenerate.
+    object.updateMatrixWorld(true);
+    onReady(mesh);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mesh]);
+  }, [mesh, object]);
 
   return <primitive object={object} />;
 }

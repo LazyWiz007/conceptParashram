@@ -72,11 +72,12 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.title,
     status: "open",
     size: "22 × 9 cm",
-    bestView: "front",
     pitch:
       "The finish-line photograph. Every frame shot from the front — the arch, the podium, the press wall — puts this logo dead centre.",
-    placement: {
-      front: [[0.358, 0.162], [0.642, 0.162], [0.654, 0.236], [0.346, 0.236]],
+    anchor: {
+      position: [0.077, 0.97, 0.367],
+      rotation: [-0.303, -0.134, -0.042],
+      size: [0.62, 0.26, 0.7],
     },
   },
   {
@@ -86,10 +87,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.prime,
     status: "open",
     size: "12 × 10 cm",
-    bestView: "front",
     pitch: "Classic sponsor position. Reads clearly in every head-on photo and on the bike.",
-    placement: {
-      front: [[0.276, 0.266], [0.454, 0.254], [0.454, 0.356], [0.280, 0.346]],
+    anchor: {
+      position: [0.27, 0.548, 0.368],
+      rotation: [0.083, 0.554, -0.044],
+      size: [0.36, 0.3, 0.7],
     },
   },
   {
@@ -99,10 +101,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.prime,
     status: "open",
     size: "12 × 10 cm",
-    bestView: "front",
     pitch: "Mirror of the left chest. Paired, the two read as a brand partnership rather than a patch.",
-    placement: {
-      front: [[0.546, 0.254], [0.724, 0.266], [0.720, 0.346], [0.546, 0.356]],
+    anchor: {
+      position: [-0.236, 0.547, 0.387],
+      rotation: [0.068, -0.434, 0.029],
+      size: [0.36, 0.3, 0.7],
     },
   },
   {
@@ -112,10 +115,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.core,
     status: "open",
     size: "16 × 7 cm",
-    bestView: "front",
     pitch: "Low front panel. Visible on the bike in the aero position, where the chest is hidden.",
-    placement: {
-      front: [[0.392, 0.388], [0.608, 0.388], [0.614, 0.466], [0.386, 0.466]],
+    anchor: {
+      position: [0.077, 0.157, 0.421],
+      rotation: [0.007, 0.076, -0.001],
+      size: [0.26, 0.22, 0.7],
     },
   },
   {
@@ -125,10 +129,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.core,
     status: "open",
     size: "8 × 7 cm",
-    bestView: "front",
     pitch: "Outer upper arm. Never still, never out of frame — it is the placement that shows up in video.",
-    placement: {
-      front: [[0.118, 0.208], [0.206, 0.196], [0.202, 0.276], [0.114, 0.270]],
+    anchor: {
+      position: [0.593, 0.678, 0.057],
+      rotation: [0.399, -0.998, 0.341],
+      size: [0.26, 0.22, 0.7],
     },
   },
   {
@@ -138,10 +143,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.core,
     status: "open",
     size: "8 × 7 cm",
-    bestView: "front",
     pitch: "Outer upper arm, right side. The arm that faces the camera on most bike-course passes.",
-    placement: {
-      front: [[0.794, 0.196], [0.882, 0.208], [0.886, 0.270], [0.798, 0.276]],
+    anchor: {
+      position: [-0.427, 0.664, 0.226],
+      rotation: [0.109, -0.831, 0.081],
+      size: [0.26, 0.22, 0.7],
     },
   },
   {
@@ -151,10 +157,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.prime,
     status: "open",
     size: "13 × 9 cm",
-    bestView: "front",
     pitch: "Black panel, high contrast. The thigh is at camera height for every roadside spectator on the run.",
-    placement: {
-      front: [[0.278, 0.626], [0.436, 0.616], [0.430, 0.722], [0.284, 0.714]],
+    anchor: {
+      position: [0.279, -0.645, 0.323],
+      rotation: [-0.101, -0.165, -0.017],
+      size: [0.36, 0.3, 0.7],
     },
   },
   {
@@ -164,10 +171,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.prime,
     status: "open",
     size: "13 × 9 cm",
-    bestView: "front",
     pitch: "Mirror of the left thigh, on the drive side of the bike — the side press photographers shoot from.",
-    placement: {
-      front: [[0.564, 0.616], [0.722, 0.626], [0.716, 0.714], [0.570, 0.722]],
+    anchor: {
+      position: [-0.14, -0.646, 0.314],
+      rotation: [0.418, -0.496, 0.208],
+      size: [0.36, 0.3, 0.7],
     },
   },
   {
@@ -177,11 +185,12 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.title,
     status: "open",
     size: "24 × 14 cm",
-    bestView: "back",
     pitch:
       "The single most-seen surface in the sport. Everyone racing behind reads it for hours, and so does every follow camera on the run course.",
-    placement: {
-      back: [[0.325, 0.150], [0.675, 0.150], [0.664, 0.302], [0.336, 0.302]],
+    anchor: {
+      position: [-0.098, 0.895, -0.4],
+      rotation: [3.038, 0.292, -3.112],
+      size: [0.62, 0.26, 0.7],
     },
   },
   {
@@ -191,10 +200,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.core,
     status: "open",
     size: "16 × 8 cm",
-    bestView: "back",
     pitch: "Just above the bibs. The one placement that stays visible in the aero tuck from behind.",
-    placement: {
-      back: [[0.368, 0.392], [0.632, 0.392], [0.626, 0.478], [0.374, 0.478]],
+    anchor: {
+      position: [-0.101, 0.193, -0.244],
+      rotation: [3.122, -0.015, 3.141],
+      size: [0.26, 0.22, 0.7],
     },
   },
   {
@@ -204,10 +214,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.support,
     status: "open",
     size: "7 × 10 cm",
-    bestView: "back",
     pitch: "Flanking the upper back. Small, clean, and always alongside the title sponsor.",
-    placement: {
-      back: [[0.245, 0.176], [0.322, 0.168], [0.328, 0.300], [0.251, 0.304]],
+    anchor: {
+      position: [-0.508, 0.875, -0.333],
+      rotation: [2.66, -0.713, 2.812],
+      size: [0.22, 0.26, 0.7],
     },
   },
   {
@@ -217,10 +228,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.support,
     status: "open",
     size: "7 × 10 cm",
-    bestView: "back",
     pitch: "Mirror of the left blade. Sold as a pair if you want both.",
-    placement: {
-      back: [[0.678, 0.168], [0.755, 0.176], [0.749, 0.304], [0.672, 0.300]],
+    anchor: {
+      position: [0.305, 0.865, -0.42],
+      rotation: [2.849, 0.056, -3.125],
+      size: [0.22, 0.26, 0.7],
     },
   },
   {
@@ -230,10 +242,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.support,
     status: "open",
     size: "11 × 8 cm",
-    bestView: "back",
     pitch: "What the athlete behind you looks at. Cheap, and seen for longer than anything on the front.",
-    placement: {
-      back: [[0.286, 0.620], [0.444, 0.614], [0.438, 0.722], [0.292, 0.728]],
+    anchor: {
+      position: [-0.323, -0.693, -0.346],
+      rotation: [2.743, -0.497, 2.943],
+      size: [0.22, 0.26, 0.7],
     },
   },
   {
@@ -243,10 +256,11 @@ export const SLOTS: Slot[] = [
     price: TIER_PRICE.support,
     status: "open",
     size: "11 × 8 cm",
-    bestView: "back",
     pitch: "Mirror of the left rear thigh. The last thing anyone you pass sees.",
-    placement: {
-      back: [[0.556, 0.614], [0.714, 0.620], [0.708, 0.728], [0.562, 0.722]],
+    anchor: {
+      position: [0.122, -0.689, -0.373],
+      rotation: [2.601, -0.202, 3.022],
+      size: [0.22, 0.26, 0.7],
     },
   },
 ];

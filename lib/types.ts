@@ -1,13 +1,3 @@
-export type ViewId = "front" | "three-quarter" | "side" | "back";
-
-export const VIEW_ORDER: ViewId[] = ["front", "three-quarter", "side", "back"];
-
-/** A point in normalised canvas space: 0..1 across the 940x1380 suit plate. */
-export type Pt = readonly [number, number];
-
-/** Four corners, clockwise from top-left, in normalised canvas space. */
-export type Quad = readonly [Pt, Pt, Pt, Pt];
-
 export type TierId = "title" | "prime" | "core" | "support";
 
 export type SlotStatus = "open" | "pending" | "sold";
@@ -19,11 +9,23 @@ export type Sponsor = {
   url?: string;
 };
 
+/**
+ * Where a slot sits on the suit, in the normalised model space SuitModel
+ * establishes (centred on the origin, scaled to a fixed height). `rotation` is
+ * the decal projector's orientation: its +Z axis is the outward surface normal.
+ */
+export type SlotAnchor = {
+  position: [number, number, number];
+  rotation: [number, number, number];
+  /** Projector box [width, height, depth]; depth must cross the surface. */
+  size: [number, number, number];
+};
+
 export type Slot = {
   id: string;
   label: string;
   tier: TierId;
-  /** Price in paise-free rupees. */
+  /** Price in rupees. */
   price: number;
   status: SlotStatus;
   sponsor?: Sponsor;
@@ -31,10 +33,7 @@ export type Slot = {
   pitch: string;
   /** Printed size on the real suit. */
   size: string;
-  /** Where the slot sits in each view it is visible from. */
-  placement: Partial<Record<ViewId, Quad>>;
-  /** The view that shows this slot best; clicking the slot rotates here. */
-  bestView: ViewId;
+  anchor: SlotAnchor;
 };
 
 export type Tier = {

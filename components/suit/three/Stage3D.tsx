@@ -1,18 +1,58 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, type ThreeEvent } from "@react-three/fiber";
 import { ContactShadows, OrbitControls } from "@react-three/drei";
 import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useCallback, useRef, useState } from "react";
 import * as THREE from "three";
-import { SlotDecal3D } from "./SlotDecal3D";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Chamber3D } from "./Chamber3D";
 import { SuitModel } from "./SuitModel";
+import { SlotDecal3D } from "./SlotDecal3D";
+import { anchorFromHit, type Anchor } from "./anchorMath";
+import { CameraRig, type CameraMove } from "./CameraRig";
+import type { Slot } from "@/lib/types";
 
-export function Stage3D() {
+export function Stage3D({
+  slots,
+  move,
+  focusedId,
+  hoveredId,
+  onHover,
+  onSelect,
+  onBackgroundClick,
+  onPlace,
+  spin = 0,
+  placementSize,
+}: {
+  slots: Slot[];
+  move: CameraMove | null;
+  focusedId?: string | null;
+  hoveredId?: string | null;
+  onHover?: (id: string | null) => void;
+  onSelect?: (id: string) => void;
+  onBackgroundClick?: () => void;
+  /** Dev authoring only: click the suit to emit an anchor at that point. */
+  onPlace?: (a: Anchor) => void;
+  spin?: number;
+  placementSize?: [number, number, number];
+}) {
   const controls = useRef<OrbitControlsImpl>(null);
   const [suit, setSuit] = useState<THREE.Mesh | null>(null);
+
+  const handleSuitClick = useCallback(
+    (e: ThreeEvent<MouseEvent>) => {
+      if (onPlace && e.face) {
+        e.stopPropagation();
+        onPlace(
+          anchorFromHit(e.point, e.face.normal, e.object.matrixWorld, placementSize ?? [0.34, 0.2, 0.6], spin),
+        );
+        return;
+      }
+      onBackgroundClick?.();
+    },
+    [onPlace, placementSize, spin, onBackgroundClick],
+  );
 
   return (
     <Canvas
@@ -20,11 +60,11 @@ export function Stage3D() {
       gl={{ antialias: true, powerPreference: "high-performance" }}
       dpr={[1, 2]}
       style={{ background: "#03070d" }}
+      onPointerMissed={() => onBackgroundClick?.()}
     >
       <color attach="background" args={["#03070d"]} />
       <fog attach="fog" args={["#03070d", 12, 34]} />
 
-      {/* key + rim, roughly the reference's lighting: cool from behind, soft from front */}
       <ambientLight intensity={0.35} />
       <directionalLight position={[3, 5, 6]} intensity={1.5} color="#eaf6ff" />
       <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#36c8ff" />
@@ -33,23 +73,31 @@ export function Stage3D() {
 
       <Suspense fallback={null}>
         <Chamber3D />
-        <SuitModel onReady={setSuit} />
 
-        {/* decal projection smoke test against the stand-in's torso */}
-        <SlotDecal3D
-          target={suit}
-          position={[0, 0.17, 0.42]}
-          rotation={[0, 0, 0]}
-          size={[0.5, 0.2, 0.8]}
-          color="#d9f03c"
-        />
-        <SlotDecal3D
-          target={suit}
-          position={[-0.18, -0.1, 0.4]}
-          rotation={[0, -0.3, 0]}
-          size={[0.24, 0.18, 0.8]}
-          color="#22d3ee"
-        />
+        <group onClick={handleSuitClick}>
+          <SuitModel onReady={setSuit} />
+        </group>
+
+        {slots.map((s) => {
+          const active = focusedId === s.id || hoveredId === s.id;
+          const dimmed = Boolean(focusedId) && focusedId !== s.id;
+          return (
+            <SlotDecal3D
+              key={s.id}
+              target={suit}
+              position={s.anchor.position}
+              rotation={s.anchor.rotation}
+              size={s.anchor.size}
+              tier={s.tier}
+              taken={s.status !== "open"}
+              active={active}
+              opacity={dimmed ? 0.25 : 1}
+              onPointerOver={onHover ? () => onHover(s.id) : undefined}
+              onPointerOut={onHover ? () => onHover(null) : undefined}
+              onClick={onSelect ? () => onSelect(s.id) : undefined}
+            />
+          );
+        })}
 
         <ContactShadows
           position={[0, -2.37, 0]}
@@ -61,6 +109,8 @@ export function Stage3D() {
         />
       </Suspense>
 
+      <CameraRig move={move} controls={controls} />
+
       <OrbitControls
         ref={controls}
         target={[0, -0.2, 0]}
@@ -68,7 +118,7 @@ export function Stage3D() {
         enableDamping
         dampingFactor={0.08}
         rotateSpeed={0.7}
-        minDistance={3.4}
+        minDistance={3.2}
         maxDistance={11}
         minPolarAngle={Math.PI * 0.18}
         maxPolarAngle={Math.PI * 0.62}
