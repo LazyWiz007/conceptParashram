@@ -8,14 +8,21 @@
 export const DRAFT = true;
 
 export const athlete = {
-  name: "Omkar", // TODO: full name
-  handle: "@omkar", // TODO
-  instagram: "https://instagram.com/", // TODO
-  strava: "https://strava.com/", // TODO
-  youtube: "https://youtube.com/", // TODO
-  email: "sponsor@example.com", // TODO: real enquiry inbox
+  name: "Parashram Gore",
+  title: "Founder · Hybrid Athlete",
+  tagline: "Here to prove you can do it all.",
+  handle: "@parshuram_.gore",
+  instagram: "https://www.instagram.com/parshuram_.gore/",
+  website: "https://webrook.in",
+  strava: "", // TODO: Strava profile, if you want it linked
+  youtube: "", // TODO
+  email: "pgore.work@gmail.com",
   phone: "+91 00000 00000", // TODO
   entity: "TODO Pvt Ltd", // TODO: who invoices sponsors
+  /** Looping ambient clip behind the suit. */
+  video: "/media/swim.mp4",
+  videoPoster: "/media/swim-poster.jpg",
+  videoCaption: "I'll make it work. I'm insane.",
 };
 
 export const race = {
@@ -24,20 +31,35 @@ export const race = {
   location: "TODO — city, country",
   /** ISO date. Drives the countdown. TODO: real race date. */
   date: "2027-03-14T06:00:00+05:30",
-  goal: "Finish under 12 hours.", // TODO
+  goal: "Finish under 12 hours.", // TODO: your actual target
   story: [
-    "Three years ago I could not swim 50 metres without stopping.",
-    "An Ironman is a 3.8 km swim, a 180 km ride and then a marathon, back to back, inside a single day. Most people who start one have spent a year building the body that can survive it. I am in the middle of that year now — roughly 18 hours of training a week, most of it before sunrise, all of it paid for out of my own pocket.",
+    "I run a company and I race. Most people pick one.",
+    "An Ironman is a 3.8 km swim, a 180 km ride and then a marathon, back to back, inside a single day. I have already done the 70.3, Hyrox, the 5i50 and a string of MTB and road events — this is the full distance, and it is the hardest thing I have signed up for. Training sits either side of a working day, roughly 18 hours a week, most of it before sunrise.",
     "This page is how I cover the rest: the entry, the travel, the bike, the coaching, and a seven-part film crew following the whole thing.",
   ],
 };
 
+/**
+ * Lifted from the Instagram highlights. Some of these were brand shoots rather
+ * than sponsorships — TODO: confirm which can be described as partnerships
+ * before this goes anywhere near a sponsor deck.
+ */
+export const track = [
+  "IRONMAN 70.3",
+  "Ironman 5i50",
+  "Hyrox",
+  "Heritage Run",
+  "Red Bull",
+  "Formula E",
+  "MTB",
+];
+
 export const reach = {
-  /** TODO: replace every number below with real analytics. */
+  /** Instagram is live as of 21 Oct 2026; the rest still need real figures. */
   stats: [
-    { label: "Instagram", value: 0, suffix: "followers" },
-    { label: "Strava", value: 0, suffix: "followers" },
-    { label: "YouTube", value: 0, suffix: "subscribers" },
+    { label: "Instagram", value: 9643, suffix: "followers" },
+    { label: "Strava", value: 0, suffix: "followers" }, // TODO
+    { label: "YouTube", value: 0, suffix: "subscribers" }, // TODO
   ],
   raceDay: [
     { label: "Spectators on course", value: "TODO" },

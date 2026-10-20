@@ -12,6 +12,7 @@ import { SlotCard } from "./panels/SlotCard";
 import { SlotList } from "./panels/SlotList";
 import { ActivityTicker } from "./panels/ActivityTicker";
 import { Countdown } from "./panels/Countdown";
+import { AthleteBadge } from "./panels/AthleteBadge";
 
 // WebGL has no business in the server bundle, and the chamber is heavy enough
 // that the copy should paint first.
@@ -58,6 +59,7 @@ export function Studio() {
             onHover={setHoveredId}
             onSelect={select}
             onBackgroundClick={close}
+            video={athlete.video}
           />
         </CanvasBoundary>
       </div>
@@ -80,6 +82,9 @@ export function Studio() {
         <h1 className="text-balance text-2xl font-semibold leading-[1.1] tracking-tight sm:text-[2rem]">
           Sponsor my trisuit
         </h1>
+        <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--tier-prime)]">
+          {athlete.name} · {athlete.title}
+        </p>
         <p className="mt-2 max-w-[30ch] text-sm leading-relaxed text-[var(--ink-dim)] [@media(max-height:620px)]:hidden">
           {openCount} places on the suit I will race {race.name} in. Spin it, pick one, put your
           logo on it.
@@ -107,14 +112,9 @@ export function Studio() {
         <ActivityTicker />
       </div>
 
-      <a
-        href={athlete.instagram}
-        target="_blank"
-        rel="noreferrer"
-        className="absolute bottom-4 right-4 z-20 font-mono text-[11px] text-[var(--ink-faint)] transition hover:text-[var(--ink)] sm:bottom-6 sm:right-6"
-      >
-        {athlete.handle} ↗
-      </a>
+      <div className="absolute bottom-4 right-4 z-20 max-w-[calc(100vw-2rem)] sm:bottom-6 sm:right-6">
+        <AthleteBadge />
+      </div>
 
       <button
         onClick={() => setListOpen(true)}

@@ -11,6 +11,7 @@ import { SuitModel } from "./SuitModel";
 import { SlotDecal3D } from "./SlotDecal3D";
 import { anchorFromHit, type Anchor } from "./anchorMath";
 import { CameraRig, type CameraMove } from "./CameraRig";
+import { VideoPanel } from "./VideoPanel";
 import type { Slot } from "@/lib/types";
 
 export function Stage3D({
@@ -24,6 +25,7 @@ export function Stage3D({
   onPlace,
   spin = 0,
   placementSize,
+  video,
 }: {
   slots: Slot[];
   move: CameraMove | null;
@@ -36,6 +38,8 @@ export function Stage3D({
   onPlace?: (a: Anchor) => void;
   spin?: number;
   placementSize?: [number, number, number];
+  /** Ambient clip on the screen behind the suit. */
+  video?: string;
 }) {
   const controls = useRef<OrbitControlsImpl>(null);
   const [suit, setSuit] = useState<THREE.Mesh | null>(null);
@@ -73,6 +77,7 @@ export function Stage3D({
 
       <Suspense fallback={null}>
         <Chamber3D />
+        {video && <VideoPanel src={video} />}
 
         <group onClick={handleSuitClick}>
           <SuitModel onReady={setSuit} />
