@@ -21,12 +21,25 @@ export function db(): SupabaseClient | null {
 
 type VisitorEvent = { id: string; country: string; seenAt: string; isNew: boolean };
 
-const mem = {
-  slotViews: new Map<string, number>(),
-  visitors: [] as VisitorEvent[],
-  seen: new Set<string>(),
-  enquiries: [] as Record<string, unknown>[],
+type MemStore = {
+  slotViews: Map<string, number>;
+  visitors: VisitorEvent[];
+  seen: Set<string>;
+  enquiries: Record<string, unknown>[];
 };
+
+/**
+ * Hung off globalThis so it survives HMR re-evaluating this module in dev.
+ * It still does not survive a restart, and on serverless each instance gets
+ * its own copy — which is exactly why this is a local-only fallback.
+ */
+const g = globalThis as typeof globalThis & { __smtMem?: MemStore };
+const mem: MemStore = (g.__smtMem ??= {
+  slotViews: new Map<string, number>(),
+  visitors: [],
+  seen: new Set<string>(),
+  enquiries: [],
+});
 
 /* ---------------- slot views ---------------- */
 

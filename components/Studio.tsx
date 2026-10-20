@@ -28,7 +28,7 @@ export function Studio() {
     <section className="relative h-[100svh] w-full overflow-hidden">
       <Chamber />
 
-      <div className="absolute inset-0 px-4 pb-14 pt-8 sm:pb-16 sm:pt-10">
+      <div className="absolute inset-0 px-4 pb-[clamp(3.5rem,10svh,5rem)] pt-[clamp(6rem,27svh,13.5rem)] sm:pb-16 sm:pt-10">
         <SuitStage
           slots={SLOTS}
           view={view}
@@ -40,9 +40,15 @@ export function Studio() {
         />
       </div>
 
+      {/* keeps the headline legible over the suit on short screens */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[clamp(7rem,32svh,14rem)] bg-gradient-to-b from-[rgb(3_7_13/0.92)] via-[rgb(3_7_13/0.55)] to-transparent sm:h-40 sm:from-[rgb(3_7_13/0.75)]"
+        aria-hidden
+      />
+
       {/* top-left: the pitch */}
       <header
-        className={`pointer-events-none absolute left-4 top-4 z-20 max-w-[min(22rem,70vw)] transition-opacity duration-300 sm:left-6 sm:top-6 ${
+        className={`pointer-events-none absolute left-4 right-4 top-4 z-20 max-w-[min(22rem,78vw)] sm:right-auto transition-opacity duration-300 sm:left-6 sm:top-6 ${
           focusedId ? "opacity-0" : "opacity-100"
         }`}
       >
@@ -54,7 +60,7 @@ export function Studio() {
         <h1 className="text-balance text-2xl font-semibold leading-[1.1] tracking-tight sm:text-[2rem]">
           Sponsor my trisuit
         </h1>
-        <p className="mt-2 max-w-[30ch] text-sm leading-relaxed text-[var(--ink-dim)]">
+        <p className="mt-2 max-w-[30ch] text-sm leading-relaxed text-[var(--ink-dim)] [@media(max-height:620px)]:hidden">
           {openCount} places on the suit I will race {race.name} in. Pick one, put your
           logo on it, and come with me for the whole thing.
         </p>
@@ -103,7 +109,7 @@ export function Studio() {
 
       {/* scroll affordance */}
       <div
-        className={`pointer-events-none absolute bottom-[4.75rem] left-1/2 z-10 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] transition-opacity duration-300 ${
+        className={`pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] transition-opacity duration-300 ${
           focusedId || listOpen ? "opacity-0" : "opacity-60"
         }`}
       >

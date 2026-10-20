@@ -16,8 +16,12 @@ const Enquiry = z.object({
   phone: z.string().trim().max(40).optional().or(z.literal("")),
   website: z.string().trim().max(200).optional().or(z.literal("")),
   message: z.string().trim().max(2000).optional().or(z.literal("")),
-  /** Honeypot: real humans never fill this. */
-  company_url: z.string().max(0).optional(),
+  /**
+   * Honeypot. Deliberately permissive: a strict schema would reject the bot
+   * with a 400 and tell it which field it tripped on. Accept anything here and
+   * drop it silently below instead.
+   */
+  company_url: z.string().optional(),
 });
 
 const hits = new Map<string, number[]>();
