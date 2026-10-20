@@ -1,7 +1,7 @@
 "use client";
 
 import { useVideoTexture } from "@react-three/drei";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import * as THREE from "three";
 
 const NEON = "#38d9ff";
@@ -14,6 +14,28 @@ function Screen({ src, width, height }: { src: string; width: number; height: nu
     playsInline: true,
     crossOrigin: "anonymous",
   });
+
+  // Chrome pauses muted background video to save power, and drei's play() call
+  // then rejects unhandled. Swallow that, and pick the clip back up when the
+  // tab returns — otherwise the screen stays frozen for the rest of the visit.
+  useEffect(() => {
+    const video = texture.image as HTMLVideoElement | undefined;
+    if (!video) return;
+
+    const resume = () => {
+      if (document.visibilityState !== "visible" || !video.paused) return;
+      video.play().catch(() => {});
+    };
+
+    document.addEventListener("visibilitychange", resume);
+    window.addEventListener("focus", resume);
+    video.addEventListener("pause", resume);
+    return () => {
+      document.removeEventListener("visibilitychange", resume);
+      window.removeEventListener("focus", resume);
+      video.removeEventListener("pause", resume);
+    };
+  }, [texture]);
 
   return (
     <mesh>

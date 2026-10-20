@@ -5,11 +5,14 @@ import { DocumentarySection } from "@/components/sections/DocumentarySection";
 import { TiersSection } from "@/components/sections/TiersSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { athlete, race } from "@/content/site";
+import { findAvatar } from "@/lib/photos";
 
-export default function Home() {
+export default async function Home() {
+  const avatar = await findAvatar();
+
   return (
     <main>
-      <Studio />
+      <Studio avatar={avatar} />
       <RaceSection />
       <ReachSection />
       <DocumentarySection />

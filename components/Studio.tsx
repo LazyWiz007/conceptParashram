@@ -20,7 +20,7 @@ const Stage3D = dynamic(() => import("@/components/suit/three/Stage3D").then((m)
   ssr: false,
 });
 
-export function Studio() {
+export function Studio({ avatar }: { avatar?: string | null }) {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(false);
@@ -113,7 +113,7 @@ export function Studio() {
       </div>
 
       <div className="absolute bottom-4 right-4 z-20 max-w-[calc(100vw-2rem)] sm:bottom-6 sm:right-6">
-        <AthleteBadge />
+        <AthleteBadge avatar={avatar} />
       </div>
 
       <button
