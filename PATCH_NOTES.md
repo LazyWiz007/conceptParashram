@@ -4,6 +4,34 @@ Changes made on top of the cloned repo (base commit `066e4bb`). Newest first.
 
 ## 2026-10-21
 
+### Warp-speed streaks in the sky
+- **The effect:** thin white and yellow streaks of light now fly out of the
+  far end of the arch tunnel, as if the room were rushing forward. Each
+  streak has its own angle, speed, length and brightness, and the heads
+  speed up as they move out. There are two white layers at different
+  densities plus a yellow one.
+- **Where it shows:** it's the sky behind everything. The room and the suit
+  draw over it, so it shows through the void above the blocks, between the
+  pillars and down the tunnel. The suit, the patches and the room are
+  unchanged.
+- **Follows the camera:**
+  - The burst is centred on wherever the tunnel's vanishing point is on
+    screen.
+  - Orbit round and the centre moves with it. From the side the streaks
+    become near-parallel lines racing past.
+  - Facing away from the tunnel, they run backwards into the opposite
+    vanishing point.
+- **Details:**
+  - The lines are 1.5–3 pixels wide at any screen size. A first try was
+    under a pixel and didn't show.
+  - It's a single full-screen shader layer drawn first, so it costs very
+    little.
+  - It ignores clicks, so the suit's patches stay clickable.
+  - It starts moving before the suit finishes loading.
+  - Reduced motion freezes it.
+- Files: `components/suit/three/SpeedLines.tsx` (new), `Stage3D.tsx` (mounts
+  it).
+
 ### Pedestal glow turned down a little
 - Every part of the pedestal's glow is about 20% dimmer, so the pad reads as
   a yellow gradient instead of blowing out to white in the middle.

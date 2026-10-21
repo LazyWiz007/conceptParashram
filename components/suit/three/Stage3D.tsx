@@ -7,6 +7,7 @@ import { Suspense, useCallback, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import { Chamber3D, PEDESTAL_TOP } from "./Chamber3D";
+import { SpeedLines } from "./SpeedLines";
 import { SuitModel } from "./SuitModel";
 import { SlotDecal3D } from "./SlotDecal3D";
 import { anchorFromHit, type Anchor } from "./anchorMath";
@@ -73,6 +74,8 @@ export function Stage3D({
     >
       <color attach="background" args={["#111113"]} />
       <fog attach="fog" args={["#111113", 22, 60]} />
+      {/* outside Suspense, so the sky is moving before the suit has loaded */}
+      <SpeedLines />
 
       <ambientLight intensity={0.35} />
       <directionalLight position={[3, 5, 6]} intensity={1.5} color="#eaf6ff" />
