@@ -278,3 +278,38 @@ body {
     animation: none;
   }
 }
+
+/* ---------- auto-scrolling photo strip ---------- */
+
+.marquee {
+  overflow: hidden;
+  /* fade both ends so photos enter and leave instead of being cut off */
+  mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 0.75rem;
+  animation: marquee-slide 42s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-slide {
+  to {
+    /* exactly one of the three copies, so the wrap is invisible */
+    transform: translate3d(calc(-100% / 3), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+  .marquee {
+    overflow-x: auto;
+  }
+}

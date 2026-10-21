@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect } from "react";
 import { aboutPhotos, athlete, race, social, track } from "@/content/site";
 import { compact } from "@/lib/format";
-import { PhotoCarousel } from "@/components/sections/PhotoCarousel";
+import { PhotoMarquee } from "@/components/sections/PhotoMarquee";
 
 export function AboutModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   // the page itself never scrolls, so the only scroll to worry about is inside
@@ -62,86 +62,44 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
               </button>
             </header>
 
-            <div className="scroll-slim overflow-y-auto px-6 py-7">
-              <div className="grid gap-9 md:grid-cols-[1fr_1.1fr]">
-                <PhotoCarousel photos={aboutPhotos} alt={athlete.name} />
-
-                <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                    {athlete.title}
-                  </p>
-                  <div className="mt-4 space-y-3.5">
-                    {race.story.map((p, i) => (
-                      <p
-                        key={i}
-                        className={
-                          i === 0
-                            ? "text-xl font-medium leading-snug text-[var(--ink)]"
-                            : "text-base leading-relaxed text-[var(--ink-dim)]"
-                        }
-                      >
-                        {p}
-                      </p>
-                    ))}
-                  </div>
-
-                  <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-4">
-                    {[
-                      [compact(social.followers), "followers"],
-                      [String(social.posts), "posts"],
-                      [when, "race day"],
-                    ].map(([v, k]) => (
-                      <div key={k}>
-                        <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
-                          {k}
-                        </dt>
-                        <dd className="mt-1 text-lg font-semibold tabular-nums">{v}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-
-              <div className="mt-9 grid items-center gap-7 border-t border-[var(--line)] pt-8 md:grid-cols-[1.2fr_1fr]">
-                <a
-                  href={athlete.instagram}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block overflow-hidden rounded-xl border border-[var(--line)] transition hover:border-[var(--line-strong)]"
-                >
-                  <Image
-                    src={social.screenshot}
-                    alt={`${athlete.handle} on Instagram`}
-                    width={1293}
-                    height={936}
-                    sizes="(max-width: 768px) 88vw, 36vw"
-                    className="w-full"
-                  />
-                </a>
-                <div>
-                  <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
-                    Not a hypothetical
-                  </p>
-                  <p className="mt-3 text-base leading-relaxed text-[var(--ink-dim)]">
-                    {compact(social.followers)} people already follow the training. They will watch
-                    this race whether or not anyone sponsors it — your logo just comes along.
-                  </p>
-                  <a
-                    href={athlete.instagram}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-4 inline-flex rounded-full border border-[var(--line)] px-4 py-2 text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)]"
-                  >
-                    {athlete.handle} ↗
-                  </a>
-                </div>
-              </div>
-
-              <div className="mt-9 border-t border-[var(--line)] pt-7">
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--ink-faint)]">
-                  Raced so far
+            <div className="scroll-slim overflow-y-auto">
+              {/* text first, then the photos, then Instagram */}
+              <div className="px-6 pb-7 pt-7">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
+                  {athlete.title}
                 </p>
-                <ul className="mt-3.5 flex flex-wrap gap-2">
+
+                <div className="mt-4 max-w-[70ch] space-y-3.5">
+                  {race.story.map((p, i) => (
+                    <p
+                      key={i}
+                      className={
+                        i === 0
+                          ? "text-xl font-medium leading-snug text-[var(--ink)] sm:text-2xl"
+                          : "text-base leading-relaxed text-[var(--ink-dim)]"
+                      }
+                    >
+                      {p}
+                    </p>
+                  ))}
+                </div>
+
+                <dl className="mt-6 flex flex-wrap gap-x-9 gap-y-4">
+                  {[
+                    [compact(social.followers), "followers"],
+                    [String(social.posts), "posts"],
+                    [when, "race day"],
+                  ].map(([v, k]) => (
+                    <div key={k}>
+                      <dt className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
+                        {k}
+                      </dt>
+                      <dd className="mt-1 text-lg font-semibold tabular-nums">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+
+                <ul className="mt-6 flex flex-wrap gap-2">
                   {track.map((t) => (
                     <li
                       key={t}
@@ -151,9 +109,35 @@ export function AboutModal({ open, onClose }: { open: boolean; onClose: () => vo
                     </li>
                   ))}
                 </ul>
-                <p className="mt-6 text-sm text-[var(--ink-faint)]">
-                  {athlete.email}
-                </p>
+              </div>
+
+              <PhotoMarquee photos={aboutPhotos} alt={athlete.name} />
+
+              <div className="px-6 pb-7 pt-8">
+                <a
+                  href={athlete.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block max-w-xl overflow-hidden rounded-xl border border-[var(--line)] transition hover:border-[var(--line-strong)]"
+                >
+                  <Image
+                    src={social.screenshot}
+                    alt={`${athlete.handle} on Instagram`}
+                    width={1293}
+                    height={936}
+                    sizes="(max-width: 768px) 88vw, 36rem"
+                    className="w-full"
+                  />
+                </a>
+                <a
+                  href={athlete.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 inline-flex rounded-full border border-[var(--line)] px-4 py-2 text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)]"
+                >
+                  {athlete.handle} ↗
+                </a>
+                <p className="mt-5 text-sm text-[var(--ink-faint)]">{athlete.email}</p>
               </div>
             </div>
           </motion.div>
