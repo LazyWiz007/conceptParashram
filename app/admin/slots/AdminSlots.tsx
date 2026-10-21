@@ -1,13 +1,15 @@
 "use client";
 
 import dynamicImport from "next/dynamic";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import type * as THREE from "three";
 import { TIERS } from "@/content/slots";
 import { TIER_HEX } from "@/lib/tierColors";
 import { cameraForAnchor } from "@/lib/slotCamera";
 import { inr } from "@/lib/format";
 import { HOME, type CameraMove } from "@/components/suit/three/CameraRig";
 import type { Anchor } from "@/components/suit/three/anchorMath";
+import { slideOnSurface, withSpin } from "@/lib/anchorOrient";
 import type { Slot, TierId } from "@/lib/types";
 
 const Stage3D = dynamicImport(
@@ -28,7 +30,12 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
   const [slots, setSlots] = useState<Slot[]>(initial);
   const [activeId, setActiveId] = useState<string>(initial[0]?.id ?? "");
   const [move, setMove] = useState<CameraMove | null>(HOME);
-  const [spin, setSpin] = useState(0);
+  const suitMesh = useRef<THREE.Mesh | null>(null);
+  // nudge() fires faster than React re-renders, so it reads the live slots from
+  // here rather than from its own closure — otherwise five quick clicks all
+  // start from the same anchor and only one step ever lands.
+  const slotsRef = useRef<Slot[]>(initial);
+  slotsRef.current = slots;
   const [placing, setPlacing] = useState(false);
   const [save, setSave] = useState<Save>("idle");
   const [error, setError] = useState<string | null>(null);
@@ -49,9 +56,29 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
 
   function onPlace(a: Anchor) {
     if (!active || !placing) return;
-    // keep the slot's own size; the click only decides where and which way
-    setAnchor(active.id, (old) => ({ ...old, position: a.position, rotation: a.rotation }));
+    // the click decides where and which way; the slot keeps its own size and spin
+    setAnchor(active.id, (old) =>
+      withSpin({ ...old, position: a.position, rotation: a.rotation }, old.spin ?? 0),
+    );
     setPlacing(false);
+  }
+
+  /** Slide the slot across the body. Refuses a step that leaves the mesh. */
+  function nudge(dx: number, dy: number) {
+    const mesh = suitMesh.current;
+    const current = slotsRef.current.find((s) => s.id === activeId);
+    if (!mesh || !current) return;
+
+    const moved = slideOnSurface(current.anchor, mesh, dx, dy);
+    if (!moved) {
+      setError("That would move the slot off the suit.");
+      setTimeout(() => setError(null), 2000);
+      return;
+    }
+    slotsRef.current = slotsRef.current.map((s) =>
+      s.id === activeId ? { ...s, anchor: moved } : s,
+    );
+    setSlots(slotsRef.current);
   }
 
   function addSlot() {
@@ -198,8 +225,9 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
             setMove(cameraForAnchor(slots.find((s) => s.id === id)!.anchor));
           }}
           onPlace={placing ? onPlace : undefined}
-          spin={spin}
+          spin={active?.anchor.spin ?? 0}
           placementSize={active?.anchor.size}
+          onSuitReady={(m) => (suitMesh.current = m)}
         />
 
         <div className="pointer-events-none absolute inset-x-0 top-4 flex justify-center">
@@ -310,14 +338,25 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
             />
             <Slider
               label="Rotate"
-              value={spin}
+              value={active.anchor.spin ?? 0}
               min={-Math.PI}
               max={Math.PI}
               suffix="°"
               display={(v) => Math.round((v * 180) / Math.PI)}
-              onChange={setSpin}
-              hint="Rotation applies on the next placement click"
+              onChange={(v) => setAnchor(active.id, (a) => withSpin(a, v))}
             />
+
+            <div>
+              <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.12em] text-[var(--ink-faint)]">
+                Nudge along the suit
+              </span>
+              <Dpad onNudge={nudge} />
+              <p className="mt-1.5 font-mono text-[10px] text-[var(--ink-faint)]" data-pos>
+                x {active.anchor.position[0].toFixed(3)} · y{" "}
+                {active.anchor.position[1].toFixed(3)} · z{" "}
+                {active.anchor.position[2].toFixed(3)}
+              </p>
+            </div>
 
             <Field label="Printed size (shown to sponsors)">
               <input
@@ -446,6 +485,29 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
           </div>
         )}
       </aside>
+    </div>
+  );
+}
+
+const STEP = 0.03;
+
+/** Four-way nudge. Each press slides the slot a step across the surface. */
+function Dpad({ onNudge }: { onNudge: (dx: number, dy: number) => void }) {
+  const btn =
+    "grid h-9 place-items-center rounded-lg border border-[var(--line)] text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)] active:bg-[rgb(56_189_248/0.12)]";
+  return (
+    <div className="grid w-32 grid-cols-3 grid-rows-3 gap-1">
+      <span />
+      <button className={btn} onClick={() => onNudge(0, STEP)} aria-label="Move up">↑</button>
+      <span />
+      <button className={btn} onClick={() => onNudge(-STEP, 0)} aria-label="Move left">←</button>
+      <span className="grid place-items-center font-mono text-[9px] text-[var(--ink-faint)]">
+        {Math.round(STEP * 100)}
+      </span>
+      <button className={btn} onClick={() => onNudge(STEP, 0)} aria-label="Move right">→</button>
+      <span />
+      <button className={btn} onClick={() => onNudge(0, -STEP)} aria-label="Move down">↓</button>
+      <span />
     </div>
   );
 }

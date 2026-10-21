@@ -25,6 +25,8 @@ export type SlotAnchor = {
   rotation: [number, number, number];
   /** Projector box [width, height, depth]; depth must cross the surface. */
   size: [number, number, number];
+  /** Rotation within the surface plane, radians. Baked into `rotation` too. */
+  spin?: number;
 };
 
 export type Slot = {

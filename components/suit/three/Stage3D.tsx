@@ -26,6 +26,7 @@ export function Stage3D({
   spin = 0,
   placementSize,
   video,
+  onSuitReady,
 }: {
   slots: Slot[];
   move: CameraMove | null;
@@ -40,6 +41,8 @@ export function Stage3D({
   placementSize?: [number, number, number];
   /** Ambient clip on the screen behind the suit. */
   video?: string;
+  /** Hands the loaded mesh out so callers can raycast against it. */
+  onSuitReady?: (mesh: THREE.Mesh) => void;
 }) {
   const controls = useRef<OrbitControlsImpl>(null);
   const [suit, setSuit] = useState<THREE.Mesh | null>(null);
@@ -80,7 +83,12 @@ export function Stage3D({
         {video && <VideoPanel src={video} />}
 
         <group onClick={handleSuitClick}>
-          <SuitModel onReady={setSuit} />
+          <SuitModel
+            onReady={(m) => {
+              setSuit(m);
+              onSuitReady?.(m);
+            }}
+          />
         </group>
 
         {slots.map((s) => (

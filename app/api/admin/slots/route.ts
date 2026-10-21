@@ -16,7 +16,12 @@ const SlotSchema = z.object({
   status: z.enum(["open", "pending", "sold"]),
   pitch: z.string().max(600).default(""),
   size: z.string().max(40).default(""),
-  anchor: z.object({ position: Vec3, rotation: Vec3, size: Vec3 }),
+  anchor: z.object({
+    position: Vec3,
+    rotation: Vec3,
+    size: Vec3,
+    spin: z.number().min(-Math.PI * 2).max(Math.PI * 2).optional(),
+  }),
   sponsor: z
     .object({
       name: z.string().max(80),
