@@ -2,6 +2,128 @@
 
 Changes made on top of the cloned repo (base commit `066e4bb`). Newest first.
 
+## 2026-10-22
+
+### Preview buttons are easy to find
+- **The problem:** "Change logo" and "Stop preview" were small text links
+  under the preview's description, easy to miss even though they're the only
+  way to change or leave a preview.
+- **Now:** they're a pair of full-size buttons, 44px tall, side by side
+  across the bottom of the preview panel, each with an icon.
+  - **Change logo:** yellow outline, upload icon. It's the main action.
+  - **Stop preview:** white outline, ✕ icon.
+- The heading "Your logo is on the suit." is now semibold.
+- **Tested:** "Stop preview" still ends the preview and brings back the
+  "Try your logo on the suit" button.
+- File: `components/panels/SlotCard.tsx`.
+
+### Stopping a logo preview no longer freezes the page
+- **The lag:** "Stop preview", or closing the card during a preview, froze
+  the page for about 2.3 seconds (measured as one 2,279 ms long task).
+  - The preview had removed the 16 placeholder stickers from the scene, and
+    stopping it added them all back at once.
+  - Building each sticker means clipping the suit's ~141k-vertex mesh, so 16
+    rebuilds in a row blocked the browser.
+- **The fix:** every sticker now stays mounted. During a preview the
+  placeholders are only hidden, so nothing has to be rebuilt when they come
+  back.
+  - Hidden stickers also stop responding to hovers and clicks. three.js still
+    hit-tests invisible meshes, so they would otherwise steal clicks meant
+    for the suit.
+- **Measured after:** no long tasks (none over 50 ms) when starting or
+  stopping a preview. During a preview, clicking where a hidden placeholder
+  sits reaches the suit instead.
+- Files: `components/Studio.tsx`, `components/suit/three/Stage3D.tsx`
+  (new `hiddenIds` prop), `SlotDecal3D.tsx` (new `hidden` prop).
+
+### Uploaded logos print without a sticker, at their own aspect ratio
+- **No sticker behind the logo:** a logo with no brand colour, which is how
+  a visitor's upload works, is now drawn on its own. There's no white rounded
+  box and no border, and its transparency is kept, so a transparent PNG
+  prints straight onto the fabric.
+  - Sold slots that have a brand colour set in `/admin/slots` still get their
+    coloured box behind the logo.
+- **Aspect ratio kept:**
+  - The logo is fitted inside the slot area ("contain") at its own
+    proportions, centred, and never stretched.
+  - What looked stretched before was the white rounded box, which takes the
+    slot's shape. The logo inside it was already fitted correctly.
+  - Safeguard: the sticker artwork used to clamp its shape to between 1:4 and
+    4:1, and `DecalGeometry` stretches the artwork across the whole slot, so
+    a slot outside that range would squash its art. No current slot is
+    outside it (they run from about 1:2.6 to 3.3:1), but the artwork now
+    always has the slot's exact proportions; only the pixel resolution is
+    capped.
+- **Thumbnail:** the preview thumbnail in the slot card shows the logo on a
+  checkerboard instead of white, so transparency is visible there too.
+- **Tested** with a transparent wide logo on the centre chest, and a round
+  logo on the tall, narrow left side panel. The circle stayed round in both
+  and there was no background.
+- Files: `lib/slotTexture.ts`, `components/Studio.tsx`,
+  `components/panels/SlotCard.tsx`.
+
+### Logos on the suit are unlit
+- **The problem:** a sticker carrying a logo was too bright. It used a lit
+  material with a white glow that doubled when the slot was selected, which
+  it always is during a preview, and bloom flared it to near-white on top.
+- **Now:** stickers with a logo use an unlit material. That covers a
+  visitor's preview and real sold slots. There's no lighting and no glow:
+  the artwork is shown as it is, multiplied by `#c8c8c8`, so white reads as a
+  soft off-white and stays under the bloom threshold. Logo colours come
+  through true, like a printed patch.
+- The empty "YOUR LOGO" stickers that are for sale still glow, so they still
+  catch the eye.
+- File: `components/suit/three/SlotDecal3D.tsx`.
+
+### Grey text is easier to read
+- **The problem:** secondary and faint grey text was hard to see over the
+  bright scene, especially where it crossed a yellow arch tube or the
+  glowing pedestal. Grey on yellow has almost no contrast.
+- **Bolder:** all text in the two greys (`--ink-dim`, `--ink-faint`) is now
+  medium weight (500) instead of regular. That's 68 places across 14 files,
+  handled by one CSS rule.
+  - The rule sits in Tailwind's base layer, so elements that already set a
+    weight, like `font-semibold`, keep it.
+- **Halo:** the same text has a soft dark shadow, so it stays readable where
+  it overlaps the neon.
+- **Brighter:** `--ink-dim` goes from `#b9b9bd` to `#c9c9cd`, and
+  `--ink-faint` from `#85858c` to `#9d9da4`.
+- File: `app/globals.css`.
+
+### Enquiry emails, a bolder CTA, a bigger claim form, and logo preview
+- **Enquiry emails through Resend:**
+  - The Resend API key and sender are set in `.env.local`, which is
+    gitignored and not committed.
+  - The sender is `onboarding@resend.dev`. Until a domain is verified in
+    Resend, mail can only go *to* the address on the Resend account.
+  - The enquiry route now logs any email that fails to send. Before, both
+    sends were fired and their results ignored, so a rejected email
+    disappeared silently. The enquiry itself is still saved and the visitor
+    still sees success.
+- **CTA button:** renamed from "Get your logo on the trisuit" to
+  "Get Your Logo", with a thick black border (4px).
+- **Bigger claim form:**
+  - The card widens from 24rem to 34rem, with more padding, and can grow to
+    90% of the screen height.
+  - Fields are taller with 15px text, and labels are larger and brighter.
+  - The message box is four lines instead of two, and the buttons are taller.
+  - On phones the fields stack in one column.
+- **Try your logo on the suit:**
+  - An open slot's card now has a "Try your logo on the suit" button under
+    "Claim this slot". Picking an image (PNG, JPG, WebP or SVG, under 5 MB)
+    puts it on that sticker, on a white background.
+  - **Preview mode:** the empty "YOUR LOGO" placeholders are hidden, and only
+    sold stickers plus the visitor's own stay on the suit.
+  - The card shows a thumbnail with "Change logo" and "Stop preview".
+    Closing the card or picking another slot also ends the preview.
+  - The image never leaves the visitor's browser. It's shown from a local
+    object URL, which is released when the preview ends.
+  - Logos drawn on stickers now cope with SVGs that have no set size. Before,
+    they would have broken the logo's scaling.
+- Files: `.env.local` (local only), `app/api/enquiry/route.ts`,
+  `components/Studio.tsx`, `components/panels/SlotCard.tsx`,
+  `components/panels/EnquiryForm.tsx`, `lib/slotTexture.ts`.
+
 ## 2026-10-21
 
 ### Second video screen, seen from behind the suit

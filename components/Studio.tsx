@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { athlete, DRAFT, race } from "@/content/site";
 import type { Slot } from "@/lib/types";
 import { cameraForAnchor } from "@/lib/slotCamera";
@@ -35,15 +35,51 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
   const focused = focusedId ? byId.get(focusedId) ?? null : null;
   const openCount = useMemo(() => slots.filter((s) => s.status === "open").length, [slots]);
 
+  /**
+   * A visitor trying their own logo on one slot. The file never leaves the
+   * browser: it is shown from an object URL, which is revoked as soon as the
+   * preview ends or another file replaces it.
+   */
+  const [preview, setPreview] = useState<{ slotId: string; url: string } | null>(null);
+  useEffect(() => () => {
+    if (preview) URL.revokeObjectURL(preview.url);
+  }, [preview]);
+
+  /**
+   * What the suit shows. Normally every slot; while previewing, only the
+   * slots that are actually sold plus the one wearing the visitor's logo, so
+   * they see the suit as it would really look rather than covered in
+   * "YOUR LOGO" placeholders.
+   *
+   * The placeholders are hidden, not removed. Every decal is built by
+   * clipping the whole suit mesh, and remounting sixteen of them when the
+   * preview ended froze the page for over two seconds.
+   */
+  const shownSlots = useMemo(() => {
+    if (!preview) return slots;
+    return slots.map((s) =>
+      s.id === preview.slotId
+        ? { ...s, status: "sold" as const, sponsor: { name: "Your logo", logo: preview.url } }
+        : s,
+    );
+  }, [slots, preview]);
+  const hiddenIds = useMemo(
+    () =>
+      new Set(preview ? slots.filter((s) => s.status === "open" && s.id !== preview.slotId).map((s) => s.id) : []),
+    [slots, preview],
+  );
+
   function select(id: string) {
     const slot = byId.get(id);
     if (!slot) return;
     if (focusedId === id) return close();
+    setPreview(null);
     setFocusedId(id);
     setMove(cameraForAnchor(slot.anchor));
   }
 
   function close() {
+    setPreview(null);
     setFocusedId(null);
     setMove(HOME);
   }
@@ -55,7 +91,8 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
       <div className="absolute inset-0">
         <CanvasBoundary>
           <Stage3D
-            slots={slots}
+            slots={shownSlots}
+            hiddenIds={hiddenIds}
             move={move}
             focusedId={focusedId}
             hoveredId={hoveredId}
@@ -128,7 +165,14 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         Every slot
       </button>
 
-      <SlotCard slot={focused} views={views[focusedId ?? ""]} onClose={close} />
+      <SlotCard
+        slot={focused}
+        views={views[focusedId ?? ""]}
+        onClose={close}
+        preview={preview && preview.slotId === focusedId ? preview.url : null}
+        onPreview={(file) => focusedId && setPreview({ slotId: focusedId, url: URL.createObjectURL(file) })}
+        onStopPreview={() => setPreview(null)}
+      />
 
       <SlotList
         slots={slots}
@@ -152,9 +196,9 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         </span>
         <button
           onClick={() => setListOpen(true)}
-          className="whitespace-nowrap rounded-full bg-[var(--accent)] px-7 py-3.5 text-[15px] font-semibold text-[#111] shadow-[0_0_34px_rgb(255_212_0/0.32)] transition hover:brightness-110 active:scale-[0.98]"
+          className="whitespace-nowrap rounded-full border-4 border-[#0a0a0a] bg-[var(--accent)] px-8 py-3.5 text-[15px] font-semibold text-[#111] shadow-[0_0_34px_rgb(255_212_0/0.32)] transition hover:brightness-110 active:scale-[0.98]"
         >
-          Get your logo on the trisuit
+          Get Your Logo
         </button>
       </div>
 

@@ -8,8 +8,8 @@
   --haze: 255 255 255;
 
   --ink: #f2f2f2;
-  --ink-dim: #b9b9bd;
-  --ink-faint: #85858c;
+  --ink-dim: #c9c9cd;
+  --ink-faint: #9d9da4;
 
   --line: rgb(255 255 255 / 0.14);
   --line-strong: rgb(255 255 255 / 0.38);
@@ -41,6 +41,22 @@
 
 * {
   min-width: 0;
+}
+
+/* Grey text sits over a bright, busy scene, and at a regular weight its thin
+   strokes broke up against the neon. Anything coloured with the two greys
+   gets medium weight, plus a soft dark halo so it still reads where it
+   crosses a yellow arch tube — grey on yellow has almost no contrast. It
+   lives in the base layer on purpose: a font-* utility on the same element
+   (font-semibold and so on) still wins. */
+@layer base {
+  [class~="text-[var(--ink-dim)]"],
+  [class~="text-[var(--ink-faint)]"] {
+    font-weight: 500;
+    text-shadow:
+      0 1px 2px rgb(0 0 0 / 0.85),
+      0 0 10px rgb(0 0 0 / 0.6);
+  }
 }
 
 html,

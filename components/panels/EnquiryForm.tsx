@@ -52,17 +52,17 @@ export function EnquiryForm({ slot, onDone }: { slot: Slot; onDone: () => void }
   }
 
   return (
-    <form onSubmit={submit} className="space-y-2.5">
-      <p className="text-xs text-[var(--ink-dim)]">
+    <form onSubmit={submit} className="space-y-4">
+      <p className="text-sm leading-relaxed text-[var(--ink-dim)]">
         Enquiring about <span className="text-[var(--ink)]">{slot.label}</span> · {inr(slot.price)}.
         No payment here — you get an invoice after we talk.
       </p>
 
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field name="company" label="Company" required />
         <Field name="contact" label="Your name" required />
       </div>
-      <div className="grid grid-cols-2 gap-2.5">
+      <div className="grid gap-4 sm:grid-cols-2">
         <Field name="email" label="Email" type="email" required />
         <Field name="phone" label="Phone" />
       </div>
@@ -78,20 +78,20 @@ export function EnquiryForm({ slot, onDone }: { slot: Slot; onDone: () => void }
         className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
 
-      {error && <p className="text-xs text-[var(--accent)]">{error}</p>}
+      {error && <p className="text-sm text-[var(--accent)]">{error}</p>}
 
-      <div className="flex gap-2 pt-1">
+      <div className="flex gap-3 pt-2">
         <button
           type="button"
           onClick={onDone}
-          className="rounded-lg border border-[var(--line)] px-4 py-2.5 text-sm text-[var(--ink-dim)] transition hover:text-[var(--ink)]"
+          className="rounded-lg border border-[var(--line)] px-5 py-3.5 text-[15px] text-[var(--ink-dim)] transition hover:text-[var(--ink)]"
         >
           Back
         </button>
         <button
           type="submit"
           disabled={state === "sending"}
-          className="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0a0a0b] transition disabled:opacity-50"
+          className="flex-1 rounded-lg px-4 py-3.5 text-[15px] font-semibold text-[#0a0a0b] transition disabled:opacity-50"
           style={{ background: `var(--tier-${slot.tier})` }}
         >
           {state === "sending" ? "Sending…" : "Send enquiry"}
@@ -115,15 +115,15 @@ function Field({
   textarea?: boolean;
 }) {
   const cls =
-    "w-full rounded-lg border border-[var(--line)] bg-[rgb(10_10_11/0.6)] px-3 py-2 text-sm text-[var(--ink)] outline-none transition placeholder:text-[var(--ink-faint)] focus:border-[var(--line-strong)]";
+    "w-full rounded-lg border border-[var(--line)] bg-[rgb(10_10_11/0.6)] px-3.5 py-3 text-[15px] text-[var(--ink)] outline-none transition placeholder:text-[var(--ink-faint)] focus:border-[var(--line-strong)]";
   return (
     <label className="block">
-      <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+      <span className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--ink-dim)]">
         {label}
         {required && <span className="ml-1 text-[var(--accent)]">*</span>}
       </span>
       {textarea ? (
-        <textarea name={name} rows={2} className={cls} />
+        <textarea name={name} rows={4} className={cls} />
       ) : (
         <input name={name} type={type} required={required} className={cls} />
       )}

@@ -76,7 +76,7 @@ export async function POST(req: Request) {
       d.message ? `\n${d.message}` : null,
     ].filter(Boolean).join("\n");
 
-    await Promise.allSettled([
+    const sent = await Promise.allSettled([
       resend.emails.send({
         from,
         to: athlete.email,
@@ -95,6 +95,16 @@ export async function POST(req: Request) {
           `Nothing is committed and nothing is charged until you have an invoice in hand.`,
       }),
     ]);
+
+    // The enquiry is already saved, so a failed email must not fail the
+    // request — but it must not vanish either. Resend reports most failures
+    // as { error } rather than throwing; until a sending domain is verified it
+    // refuses anything not addressed to the account's own email.
+    sent.forEach((r, i) => {
+      const who = i === 0 ? "athlete notification" : "sponsor confirmation";
+      const error = r.status === "rejected" ? r.reason : r.value.error;
+      if (error) console.error(`[enquiry] ${who} email failed:`, error);
+    });
   }
 
   return NextResponse.json({ ok: true });

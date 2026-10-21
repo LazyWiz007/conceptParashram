@@ -28,8 +28,11 @@ export function Stage3D({
   placementSize,
   video,
   onSuitReady,
+  hiddenIds,
 }: {
   slots: Slot[];
+  /** Slots kept mounted but not drawn, such as placeholders during a preview. */
+  hiddenIds?: ReadonlySet<string>;
   move: CameraMove | null;
   focusedId?: string | null;
   hoveredId?: string | null;
@@ -120,6 +123,7 @@ export function Stage3D({
             target={suit}
             slot={s}
             active={focusedId === s.id || hoveredId === s.id}
+            hidden={hiddenIds?.has(s.id) ?? false}
             dimmed={Boolean(focusedId) && focusedId !== s.id}
             onPointerOver={onHover ? () => onHover(s.id) : undefined}
             onPointerOut={onHover ? () => onHover(null) : undefined}

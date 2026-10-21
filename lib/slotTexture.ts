@@ -37,17 +37,28 @@ export function drawSlotArt(
   logo: HTMLImageElement | null,
   selected: boolean,
 ): SlotArt {
-  // keep the artwork's pixels square-ish to the real print, so a wide band
-  // does not stretch its logo
+  // DecalGeometry stretches UVs 0..1 across the projector's width and height,
+  // so the canvas must have exactly the print's proportions or everything
+  // drawn on it — a logo included — comes out squashed. Only the pixel count
+  // is capped, never the aspect.
   const [w, h] = slot.anchor.size;
-  const aspect = Math.max(0.25, Math.min(4, w / h));
-  const cw = aspect >= 1 ? PX : Math.round(PX * aspect);
-  const ch = aspect >= 1 ? Math.round(PX / aspect) : PX;
+  const aspect = w / h;
+  const cw = Math.max(16, aspect >= 1 ? PX : Math.round(PX * aspect));
+  const ch = Math.max(16, aspect >= 1 ? Math.round(PX / aspect) : PX);
 
   const canvas = document.createElement("canvas");
   canvas.width = cw;
   canvas.height = ch;
   const ctx = canvas.getContext("2d")!;
+
+  // A logo with no brand colour is printed on its own: no sticker, no border,
+  // its transparency kept, fitted inside the print at its own aspect ratio.
+  // That is how a visitor's uploaded preview is drawn.
+  if (slot.status !== "open" && logo && !slot.sponsor?.color) {
+    const margin = Math.round(Math.min(cw, ch) * 0.04);
+    drawContained(ctx, logo, { x: margin, y: margin, w: cw - margin * 2, h: ch - margin * 2 });
+    return finish(canvas);
+  }
 
   const taken = slot.status !== "open";
   const brand = taken ? slot.sponsor?.color ?? SOLD_HEX : TIER_HEX[slot.tier];
@@ -58,8 +69,8 @@ export function drawSlotArt(
 
   // fill
   roundRect(ctx, pad, pad, cw - pad * 2, ch - pad * 2, radius);
-  // the tiers are all shades of yellow, so the fill stays nearly opaque or the
-  // paler ones would vanish against the white top of the suit
+  // nearly opaque, or the paler tier colours vanish against the white top of
+  // the suit
   ctx.fillStyle = taken ? brand : hexWithAlpha(brand, 0.88);
   ctx.fill();
 
@@ -75,21 +86,36 @@ export function drawSlotArt(
 
   if (taken && logo) {
     // contain the logo inside the print with a comfortable margin
-    const box = { x: pad * 2.2, y: pad * 2.2, w: cw - pad * 4.4, h: ch - pad * 4.4 };
-    const scale = Math.min(box.w / logo.width, box.h / logo.height);
-    const lw = logo.width * scale;
-    const lh = logo.height * scale;
-    ctx.drawImage(logo, box.x + (box.w - lw) / 2, box.y + (box.h - lh) / 2, lw, lh);
+    drawContained(ctx, logo, { x: pad * 2.2, y: pad * 2.2, w: cw - pad * 4.4, h: ch - pad * 4.4 });
   } else if (taken) {
     label(ctx, cw, ch, slot.sponsor?.name ?? "Sponsored", "#0a0a0a");
   } else {
     label(ctx, cw, ch, "YOUR LOGO", "#0a0a0a");
   }
 
+  return finish(canvas);
+}
+
+function finish(canvas: HTMLCanvasElement): SlotArt {
   const texture = new THREE.CanvasTexture(canvas);
   texture.anisotropy = 8;
   texture.needsUpdate = true;
   return { texture, dispose: () => texture.dispose() };
+}
+
+/** Draws an image as large as fits inside `box`, centred, never stretched. */
+function drawContained(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  box: { x: number; y: number; w: number; h: number },
+) {
+  // an SVG with no width/height attributes loads at 0×0; give it a shape
+  const iw = img.naturalWidth || img.width || 300;
+  const ih = img.naturalHeight || img.height || 150;
+  const scale = Math.min(box.w / iw, box.h / ih);
+  const lw = iw * scale;
+  const lh = ih * scale;
+  ctx.drawImage(img, box.x + (box.w - lw) / 2, box.y + (box.h - lh) / 2, lw, lh);
 }
 
 function label(
