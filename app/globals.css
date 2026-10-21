@@ -43,9 +43,16 @@
   min-width: 0;
 }
 
+html,
+body {
+  /* Single frame: the only scrolling anywhere is inside a dialog. */
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
 html {
   background: var(--void);
-  scroll-behavior: smooth;
 }
 
 body {
@@ -217,7 +224,6 @@ body {
   }
 }
 
-
 /* light pillars down the side walls, like the reference chamber */
 .chamber-pillars {
   position: absolute;
@@ -266,27 +272,6 @@ body {
 
 /* the scroll-down button's arrows: each one drops and fades, the second a
    beat behind the first, so they read as a stream heading down the page */
-@keyframes scroll-chevron {
-  0% {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  45% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(7px);
-  }
-}
-
-.scroll-chevron {
-  animation: scroll-chevron 1.5s ease-in-out infinite;
-}
-
-.scroll-chevron-late {
-  animation-delay: 0.3s;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-chevron {

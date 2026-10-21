@@ -13,6 +13,7 @@ import { SlotList } from "./panels/SlotList";
 import { ActivityTicker } from "./panels/ActivityTicker";
 import { Countdown } from "./panels/Countdown";
 import { AthleteBadge } from "./panels/AthleteBadge";
+import { AboutModal } from "./panels/AboutModal";
 
 // WebGL has no business in the server bundle, and the chamber is heavy enough
 // that the copy should paint first.
@@ -20,26 +21,11 @@ const Stage3D = dynamic(() => import("@/components/suit/three/Stage3D").then((m)
   ssr: false,
 });
 
-function Chevron({ className = "" }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 14"
-      className={`absolute left-0 h-3.5 w-6 ${className}`}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={3}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 3l9 8 9-8" />
-    </svg>
-  );
-}
-
 export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | null }) {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const [move, setMove] = useState<CameraMove | null>(null);
 
   const views = useSlotViews();
@@ -63,11 +49,6 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
   }
 
   const hovered = hoveredId ? byId.get(hoveredId) : null;
-
-  function scrollToDetails() {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    document.getElementById("race")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
-  }
 
   return (
     <section className="relative h-[100svh] w-full overflow-hidden">
@@ -137,7 +118,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
       </div>
 
       <div className="absolute bottom-4 right-4 z-20 max-w-[calc(100vw-2rem)] sm:bottom-6 sm:right-6">
-        <AthleteBadge avatar={avatar} />
+        <AthleteBadge avatar={avatar} onClick={() => setAboutOpen(true)} />
       </div>
 
       <button
@@ -160,31 +141,25 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         onClose={() => setListOpen(false)}
       />
 
-      {/*
-        On a phone the canvas swallows every swipe to spin the suit, so the
-        page cannot be scrolled from here at all — this button is the way out.
-        It sits above the ticker and badge on small screens, between them on
-        larger ones.
-      */}
+      {/* Nothing to scroll to any more — this is the way into the slots. */}
       <div
-        className={`absolute bottom-[6.5rem] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-300 sm:bottom-5 ${
-          focusedId || listOpen ? "pointer-events-none opacity-0" : "opacity-100"
+        className={`absolute bottom-[6.5rem] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2.5 transition-opacity duration-300 sm:bottom-6 ${
+          focusedId || listOpen || aboutOpen ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
         <span className="pointer-events-none font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)]">
           drag to spin
         </span>
         <button
-          onClick={scrollToDetails}
-          aria-label="Scroll down to the race details"
-          className="grid h-16 w-16 place-items-center rounded-full border-2 border-[var(--accent)] bg-[var(--panel)] text-[var(--accent)] shadow-[0_0_28px_rgb(255_212_0/0.35)] backdrop-blur transition hover:bg-[rgb(255_212_0/0.12)] active:scale-95 sm:h-14 sm:w-14"
+          onClick={() => setListOpen(true)}
+          className="whitespace-nowrap rounded-full bg-[var(--accent)] px-7 py-3.5 text-[15px] font-semibold text-[#111] shadow-[0_0_34px_rgb(255_212_0/0.32)] transition hover:brightness-110 active:scale-[0.98]"
         >
-          <span className="relative block h-7 w-6" aria-hidden>
-            <Chevron className="scroll-chevron top-0" />
-            <Chevron className="scroll-chevron scroll-chevron-late top-2.5" />
-          </span>
+          Get your logo on the trisuit
         </button>
       </div>
+
+      <AboutModal open={aboutOpen} onClose={() => setAboutOpen(false)} />
+
     </section>
   );
 }
