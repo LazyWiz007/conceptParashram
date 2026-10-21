@@ -30,15 +30,9 @@ export const race = {
   short: "70.3 Goa",
   distance: "1.9 km swim · 90 km bike · 21.1 km run",
   location: "Goa, India",
-  /**
-   * ISO date, drives the countdown.
-   * TODO: the 2027 Goa date is not public yet — give it to me and flip
-   * dateConfirmed. Until then the countdown is hidden and the date reads
-   * "to be confirmed", because a wrong race date in front of a sponsor is
-   * worse than no date at all.
-   */
-  date: "2027-03-14T06:00:00+05:30",
-  dateConfirmed: false,
+  /** ISO date, drives the countdown. Confirmed: 1 November 2026. */
+  date: "2026-11-01T06:00:00+05:30",
+  dateConfirmed: true,
   goal: "Finish under 5 hours 30.", // TODO: confirm your actual target
   story: [
     "I run a company and I race. Most people pick one.",
@@ -124,7 +118,9 @@ export const faq = [
   },
   {
     q: "When is the deadline?",
-    a: "Artwork has to be with the manufacturer eight weeks before race day. Slots sold after that still get everything else — the documentary, the posts, the report — but not the print.",
+    // TODO: race day is 1 Nov 2026, so the old "eight weeks before" line was
+    // already impossible. Replace this with your real print cut-off.
+    a: "Artwork has to reach the printer before the suit goes into production. Race day is close, so message me before you commit and I will tell you straight whether your logo still makes the print. If it does not, the slot carries everything else — the documentary, the posts and the post-race report.",
   },
   {
     q: "How do I pay?",

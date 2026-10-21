@@ -4,6 +4,7 @@ import { ReachSection } from "@/components/sections/ReachSection";
 import { DocumentarySection } from "@/components/sections/DocumentarySection";
 import { TiersSection } from "@/components/sections/TiersSection";
 import { FaqSection } from "@/components/sections/FaqSection";
+import { CtaSection } from "@/components/sections/CtaSection";
 import { athlete, race } from "@/content/site";
 import { findAvatar } from "@/lib/photos";
 import { readSlots } from "@/lib/slotStore";
@@ -22,6 +23,7 @@ export default async function Home() {
       <DocumentarySection />
       <TiersSection />
       <FaqSection />
+      <CtaSection slotsLeft={slots.filter((s) => s.status === "open").length} />
       <footer className="border-t border-[var(--line)] px-5 py-10 sm:px-8">
         <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-3 font-mono text-[11px] text-[var(--ink-faint)]">
           <span>
