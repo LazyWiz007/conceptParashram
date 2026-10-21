@@ -26,7 +26,7 @@ export function AthleteBadge({ avatar }: { avatar?: string | null }) {
         />
       ) : (
         <span
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[var(--line)] bg-[rgb(56_189_248/0.1)] font-mono text-xs text-[var(--tier-prime)]"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[var(--line)] bg-[rgb(255_255_255/0.1)] font-mono text-xs text-[var(--accent)]"
           aria-hidden
         >
           PG

@@ -20,6 +20,22 @@ const Stage3D = dynamic(() => import("@/components/suit/three/Stage3D").then((m)
   ssr: false,
 });
 
+function Chevron({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 14"
+      className={`absolute left-0 h-3.5 w-6 ${className}`}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={3}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M3 3l9 8 9-8" />
+    </svg>
+  );
+}
+
 export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | null }) {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
@@ -48,6 +64,11 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
 
   const hovered = hoveredId ? byId.get(hoveredId) : null;
 
+  function scrollToDetails() {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById("race")?.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+  }
+
   return (
     <section className="relative h-[100svh] w-full overflow-hidden">
       <div className="absolute inset-0">
@@ -66,7 +87,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
       </div>
 
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[clamp(7rem,32svh,13rem)] bg-gradient-to-b from-[rgb(3_7_13/0.92)] via-[rgb(3_7_13/0.5)] to-transparent sm:h-40 sm:from-[rgb(3_7_13/0.7)]"
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[clamp(7rem,32svh,13rem)] bg-gradient-to-b from-[rgb(5_5_6/0.92)] via-[rgb(5_5_6/0.5)] to-transparent sm:h-40 sm:from-[rgb(5_5_6/0.7)]"
         aria-hidden
       />
 
@@ -76,14 +97,14 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         }`}
       >
         {DRAFT && (
-          <span className="pointer-events-auto mb-2 inline-block rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-amber-300">
+          <span className="pointer-events-auto mb-2 inline-block rounded-full border border-[rgb(255_212_0/0.4)] bg-[rgb(255_212_0/0.1)] px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--accent)]">
             Draft content
           </span>
         )}
         <h1 className="text-balance text-2xl font-semibold leading-[1.1] tracking-tight sm:text-[2rem]">
           Sponsor my trisuit
         </h1>
-        <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--tier-prime)]">
+        <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--accent)]">
           {athlete.name} · {athlete.title}
         </p>
         <p className="mt-2 max-w-[30ch] text-sm leading-relaxed text-[var(--ink-dim)] [@media(max-height:620px)]:hidden">
@@ -137,12 +158,30 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         onClose={() => setListOpen(false)}
       />
 
+      {/*
+        On a phone the canvas swallows every swipe to spin the suit, so the
+        page cannot be scrolled from here at all — this button is the way out.
+        It sits above the ticker and badge on small screens, between them on
+        larger ones.
+      */}
       <div
-        className={`pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)] transition-opacity duration-300 ${
-          focusedId || listOpen ? "opacity-0" : "opacity-60"
+        className={`absolute bottom-[6.5rem] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2 transition-opacity duration-300 sm:bottom-5 ${
+          focusedId || listOpen ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
-        drag to spin · scroll ↓
+        <span className="pointer-events-none font-mono text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)]">
+          drag to spin
+        </span>
+        <button
+          onClick={scrollToDetails}
+          aria-label="Scroll down to the race details"
+          className="grid h-16 w-16 place-items-center rounded-full border-2 border-[var(--accent)] bg-[var(--panel)] text-[var(--accent)] shadow-[0_0_28px_rgb(255_212_0/0.35)] backdrop-blur transition hover:bg-[rgb(255_212_0/0.12)] active:scale-95 sm:h-14 sm:w-14"
+        >
+          <span className="relative block h-7 w-6" aria-hidden>
+            <Chevron className="scroll-chevron top-0" />
+            <Chevron className="scroll-chevron scroll-chevron-late top-2.5" />
+          </span>
+        </button>
       </div>
     </section>
   );

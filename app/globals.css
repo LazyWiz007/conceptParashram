@@ -2,26 +2,27 @@
 
 :root {
   /* chamber */
-  --void: #03070d;
-  --void-2: #061018;
-  --grid: 56 189 248;
-  --haze: 34 211 238;
+  --void: #050506;
+  --void-2: #0b0b0d;
+  --grid: 255 255 255;
+  --haze: 255 255 255;
 
-  --ink: #e6f2fb;
-  --ink-dim: #8aa2b8;
-  --ink-faint: #4b6075;
+  --ink: #f2f2f2;
+  --ink-dim: #a3a3a3;
+  --ink-faint: #666666;
 
-  --line: rgb(56 189 248 / 0.16);
-  --line-strong: rgb(56 189 248 / 0.4);
-  --panel: rgb(6 18 28 / 0.86);
+  --line: rgb(255 255 255 / 0.14);
+  --line-strong: rgb(255 255 255 / 0.38);
+  --panel: rgb(14 14 16 / 0.86);
+  --accent: #ffd400;
 
   /* tiers */
-  --tier-title: #d9f03c;
-  --tier-prime: #22d3ee;
-  --tier-core: #818cf8;
-  --tier-support: #7c93a8;
+  --tier-title: #ffd400;
+  --tier-prime: #ffe14d;
+  --tier-core: #ffeb85;
+  --tier-support: #fff3b8;
 
-  --sold: #64748b;
+  --sold: #ffffff;
 }
 
 @theme inline {
@@ -66,8 +67,8 @@ body {
   inset: 0;
   overflow: hidden;
   background:
-    radial-gradient(120% 80% at 50% 8%, rgb(12 42 62 / 0.9) 0%, transparent 60%),
-    radial-gradient(90% 60% at 50% 100%, rgb(8 30 48 / 0.8) 0%, transparent 65%),
+    radial-gradient(120% 80% at 50% 8%, rgb(36 36 40 / 0.9) 0%, transparent 60%),
+    radial-gradient(90% 60% at 50% 100%, rgb(24 24 28 / 0.8) 0%, transparent 65%),
     linear-gradient(180deg, var(--void) 0%, var(--void-2) 55%, var(--void) 100%);
 }
 
@@ -259,4 +260,34 @@ body {
   background: radial-gradient(closest-side, rgb(var(--haze) / 0.22) 0%, transparent 72%);
   box-shadow: inset 0 0 0 1px rgb(var(--grid) / 0.3);
   pointer-events: none;
+}
+
+/* the scroll-down button's arrows: each one drops and fades, the second a
+   beat behind the first, so they read as a stream heading down the page */
+@keyframes scroll-chevron {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+}
+
+.scroll-chevron {
+  animation: scroll-chevron 1.5s ease-in-out infinite;
+}
+
+.scroll-chevron-late {
+  animation-delay: 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-chevron {
+    animation: none;
+  }
 }

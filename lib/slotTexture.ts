@@ -58,14 +58,17 @@ export function drawSlotArt(
 
   // fill
   roundRect(ctx, pad, pad, cw - pad * 2, ch - pad * 2, radius);
-  ctx.fillStyle = taken ? brand : hexWithAlpha(brand, 0.62);
+  // the tiers are all shades of yellow, so the fill stays nearly opaque or the
+  // paler ones would vanish against the white top of the suit
+  ctx.fillStyle = taken ? brand : hexWithAlpha(brand, 0.88);
   ctx.fill();
 
-  // border: dashed while the slot is still for sale, solid once taken
+  // border: dashed while the slot is still for sale, solid once taken. Black,
+  // because a white line disappears on yellow and on the white fabric alike.
   ctx.save();
   roundRect(ctx, pad, pad, cw - pad * 2, ch - pad * 2, radius);
-  ctx.lineWidth = Math.max(4, Math.min(cw, ch) * (selected ? 0.04 : 0.026));
-  ctx.strokeStyle = selected ? "#eaf8ff" : taken ? hexWithAlpha("#ffffff", 0.5) : "#ffffff";
+  ctx.lineWidth = Math.max(4, Math.min(cw, ch) * (selected ? 0.05 : 0.026));
+  ctx.strokeStyle = taken && !selected ? hexWithAlpha("#0a0a0a", 0.5) : "#0a0a0a";
   if (!taken && !selected) ctx.setLineDash([Math.min(cw, ch) * 0.07, Math.min(cw, ch) * 0.05]);
   ctx.stroke();
   ctx.restore();
@@ -78,9 +81,9 @@ export function drawSlotArt(
     const lh = logo.height * scale;
     ctx.drawImage(logo, box.x + (box.w - lw) / 2, box.y + (box.h - lh) / 2, lw, lh);
   } else if (taken) {
-    label(ctx, cw, ch, slot.sponsor?.name ?? "Sponsored", "#06121b");
+    label(ctx, cw, ch, slot.sponsor?.name ?? "Sponsored", "#0a0a0a");
   } else {
-    label(ctx, cw, ch, "YOUR LOGO", "#04121c");
+    label(ctx, cw, ch, "YOUR LOGO", "#0a0a0a");
   }
 
   const texture = new THREE.CanvasTexture(canvas);

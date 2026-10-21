@@ -6,7 +6,7 @@ import { Bloom, EffectComposer, Vignette } from "@react-three/postprocessing";
 import { Suspense, useCallback, useRef, useState } from "react";
 import * as THREE from "three";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { Chamber3D } from "./Chamber3D";
+import { Chamber3D, PEDESTAL_TOP } from "./Chamber3D";
 import { SuitModel } from "./SuitModel";
 import { SlotDecal3D } from "./SlotDecal3D";
 import { anchorFromHit, type Anchor } from "./anchorMath";
@@ -49,6 +49,8 @@ export function Stage3D({
 
   const handleSuitClick = useCallback(
     (e: ThreeEvent<MouseEvent>) => {
+      // R3F still fires onClick at the end of a drag; a drag is an orbit, not a click
+      if (e.delta > 2) return;
       if (onPlace && e.face) {
         e.stopPropagation();
         onPlace(
@@ -66,17 +68,17 @@ export function Stage3D({
       camera={{ position: [0, 0.3, 7.2], fov: 40 }}
       gl={{ antialias: true, powerPreference: "high-performance" }}
       dpr={[1, 2]}
-      style={{ background: "#03070d" }}
+      style={{ background: "#111113" }}
       onPointerMissed={() => onBackgroundClick?.()}
     >
-      <color attach="background" args={["#03070d"]} />
-      <fog attach="fog" args={["#03070d", 12, 34]} />
+      <color attach="background" args={["#111113"]} />
+      <fog attach="fog" args={["#111113", 22, 60]} />
 
       <ambientLight intensity={0.35} />
       <directionalLight position={[3, 5, 6]} intensity={1.5} color="#eaf6ff" />
-      <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#36c8ff" />
-      <directionalLight position={[5, 1.5, -4]} intensity={1.6} color="#36c8ff" />
-      <pointLight position={[0, -1.8, 1.6]} intensity={6} distance={7} color="#38d9ff" />
+      <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#f4f6f8" />
+      <directionalLight position={[5, 1.5, -4]} intensity={1.6} color="#f4f6f8" />
+      <pointLight position={[0, -1.8, 1.6]} intensity={6} distance={7} color="#ffffff" />
 
       <Suspense fallback={null}>
         <Chamber3D />
@@ -105,9 +107,10 @@ export function Stage3D({
         ))}
 
         <ContactShadows
-          position={[0, -2.37, 0]}
+          // on top of the pedestal's light pad, and no wider than it
+          position={[0, PEDESTAL_TOP + 0.005, 0]}
           opacity={0.5}
-          scale={7}
+          scale={3}
           blur={2.4}
           far={3}
           color="#000000"
@@ -120,6 +123,9 @@ export function Stage3D({
         ref={controls}
         target={[0, -0.2, 0]}
         enablePan={false}
+        // the wheel has to scroll the page past the hero; only the authoring
+        // tools, which have no page below them, keep wheel zoom
+        enableZoom={Boolean(onPlace)}
         enableDamping
         dampingFactor={0.08}
         rotateSpeed={0.7}

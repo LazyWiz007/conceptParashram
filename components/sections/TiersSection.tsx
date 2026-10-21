@@ -17,7 +17,7 @@ export function TiersSection() {
           return (
             <article
               key={tier.id}
-              className="flex flex-col rounded-2xl border border-[var(--line)] bg-[rgb(6_16_26/0.5)] p-6"
+              className="flex flex-col rounded-2xl border border-[var(--line)] bg-[rgb(16_16_18/0.5)] p-6"
               style={{ borderTopColor: `var(--tier-${tier.id})`, borderTopWidth: 2 }}
             >
               <header className="flex items-baseline justify-between gap-4">

@@ -44,7 +44,7 @@ export function SlotCard({
             <button
               onClick={onClose}
               aria-label="Close"
-              className="-mr-1 -mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(56_189_248/0.12)] hover:text-[var(--ink)]"
+              className="-mr-1 -mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(255_255_255/0.12)] hover:text-[var(--ink)]"
             >
               ✕
             </button>
@@ -84,7 +84,7 @@ function Taken({ slot }: { slot: Slot }) {
             unoptimized
           />
         ) : (
-          <span className="px-2 text-lg font-bold text-[#06121b]">{s?.name}</span>
+          <span className="px-2 text-lg font-bold text-[#0a0a0a]">{s?.name}</span>
         )}
       </div>
 
@@ -113,13 +113,13 @@ function Taken({ slot }: { slot: Slot }) {
           href={s.url}
           target="_blank"
           rel="noreferrer"
-          className="mt-3 inline-block text-sm text-[var(--tier-prime)] underline-offset-4 hover:underline"
+          className="mt-3 inline-block text-sm text-[var(--accent)] underline-offset-4 hover:underline"
         >
           {s.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗
         </a>
       )}
 
-      <div className="mt-6 rounded-xl border border-[var(--line)] bg-[rgb(56_189_248/0.05)] px-4 py-5">
+      <div className="mt-6 rounded-xl border border-[var(--line)] bg-[rgb(255_255_255/0.05)] px-4 py-5">
         <p className="text-sm text-[var(--ink-dim)]">Sponsored for</p>
         <p className="mt-1 text-3xl font-semibold tracking-tight">{inr(slot.price)}</p>
       </div>
@@ -158,14 +158,14 @@ function Available({ slot, onClaim }: { slot: Slot; onClaim: () => void }) {
         </ul>
       </div>
 
-      <div className="rounded-xl border border-[var(--line)] bg-[rgb(56_189_248/0.05)] px-4 py-4">
+      <div className="rounded-xl border border-[var(--line)] bg-[rgb(255_255_255/0.05)] px-4 py-4">
         <p className="text-sm text-[var(--ink-dim)]">Price</p>
         <p className="mt-0.5 text-3xl font-semibold tracking-tight">{inr(slot.price)}</p>
       </div>
 
       <button
         onClick={onClaim}
-        className="w-full rounded-lg px-4 py-3 text-sm font-semibold text-[#03131c] transition"
+        className="w-full rounded-lg px-4 py-3 text-sm font-semibold text-[#0a0a0b] transition"
         style={{ background: `var(--tier-${slot.tier})` }}
       >
         Claim this slot

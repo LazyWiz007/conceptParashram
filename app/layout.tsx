@@ -35,8 +35,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" id="top">
+      {/*
+        Extensions such as Grammarly stamp their own attributes onto <body>
+        before React hydrates. This only silences attribute differences on
+        this one element; mismatches anywhere inside still get reported.
+      */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>

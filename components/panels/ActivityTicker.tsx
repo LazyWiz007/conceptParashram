@@ -22,8 +22,8 @@ export function ActivityTicker() {
     <div className="pointer-events-none select-none font-mono text-[11px] leading-relaxed text-[var(--ink-faint)]">
       <p className="flex items-center gap-1.5 text-[var(--ink-dim)]">
         <span className="relative flex h-1.5 w-1.5">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--tier-prime)] opacity-75" />
-          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--tier-prime)]" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-75" />
+          <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[var(--accent)]" />
         </span>
         <span className="text-[var(--ink)]">{activity.visitorsToday}</span> looked today
       </p>

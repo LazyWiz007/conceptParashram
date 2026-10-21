@@ -28,7 +28,7 @@ export function SlotList({
       {open && (
         <>
           <motion.div
-            className="fixed inset-0 z-40 bg-[rgb(2_6_11/0.6)] backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-[rgb(6_6_7/0.6)] backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -53,13 +53,13 @@ export function SlotList({
               <button
                 onClick={onClose}
                 aria-label="Close"
-                className="grid h-8 w-8 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(56_189_248/0.12)] hover:text-[var(--ink)]"
+                className="grid h-8 w-8 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(255_255_255/0.12)] hover:text-[var(--ink)]"
               >
                 ✕
               </button>
             </div>
 
-            <ul className="scroll-slim divide-y divide-[rgb(56_189_248/0.08)] overflow-y-auto">
+            <ul className="scroll-slim divide-y divide-[rgb(255_255_255/0.08)] overflow-y-auto">
               {sorted.map((slot) => {
                 const taken = slot.status !== "open";
                 const v = views[slot.id];
@@ -67,7 +67,7 @@ export function SlotList({
                   <li key={slot.id}>
                     <button
                       onClick={() => onPick(slot)}
-                      className="flex w-full items-center justify-between gap-3 px-5 py-3 text-left transition hover:bg-[rgb(56_189_248/0.06)]"
+                      className="flex w-full items-center justify-between gap-3 px-5 py-3 text-left transition hover:bg-[rgb(255_255_255/0.06)]"
                     >
                       <span className="min-w-0">
                         <span className="flex items-center gap-2">

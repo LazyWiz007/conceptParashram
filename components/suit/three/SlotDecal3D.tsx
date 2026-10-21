@@ -86,6 +86,7 @@ export function SlotDecal3D({
         onClick
           ? (e) => {
               e.stopPropagation();
+              if (e.delta > 2) return; // end of an orbit drag, not a click
               onClick();
             }
           : undefined

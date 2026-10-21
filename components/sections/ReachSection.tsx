@@ -18,7 +18,7 @@ export async function ReachSection() {
         {reach.stats.map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl border border-[var(--line)] bg-[rgb(6_16_26/0.5)] p-5"
+            className="rounded-2xl border border-[var(--line)] bg-[rgb(16_16_18/0.5)] p-5"
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
               {s.label}
@@ -76,7 +76,7 @@ export async function ReachSection() {
         {reach.raceDay.map((s) => (
           <div
             key={s.label}
-            className="rounded-2xl border border-[var(--line)] bg-[rgb(6_16_26/0.3)] p-5"
+            className="rounded-2xl border border-[var(--line)] bg-[rgb(16_16_18/0.3)] p-5"
           >
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
               {s.label}

@@ -149,7 +149,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
   return (
     <div className="flex h-[100svh] w-full flex-col lg:flex-row">
       {/* list */}
-      <aside className="flex w-full shrink-0 flex-col border-b border-[var(--line)] bg-[rgb(4_11_18/0.9)] lg:w-64 lg:border-b-0 lg:border-r">
+      <aside className="flex w-full shrink-0 flex-col border-b border-[var(--line)] bg-[rgb(10_10_11/0.9)] lg:w-64 lg:border-b-0 lg:border-r">
         <header className="flex items-center justify-between gap-2 border-b border-[var(--line)] px-4 py-3">
           <div>
             <h1 className="text-sm font-semibold">Slots</h1>
@@ -174,7 +174,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
                   setMove(cameraForAnchor(s.anchor));
                 }}
                 className={`flex w-full items-center gap-2 px-4 py-2 text-left text-xs transition ${
-                  activeId === s.id ? "bg-[rgb(56_189_248/0.14)]" : "hover:bg-[rgb(56_189_248/0.06)]"
+                  activeId === s.id ? "bg-[rgb(255_255_255/0.14)]" : "hover:bg-[rgb(255_255_255/0.06)]"
                 }`}
               >
                 <span
@@ -191,16 +191,16 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
         </ul>
 
         <div className="space-y-2 border-t border-[var(--line)] p-3">
-          {error && <p className="text-xs text-red-400">{error}</p>}
+          {error && <p className="text-xs text-[var(--accent)]">{error}</p>}
           {!persistent && (
-            <p className="text-[10px] leading-snug text-amber-300/80">
+            <p className="text-[10px] leading-snug text-[var(--accent)]/80">
               Saving to a local file. Set SUPABASE_URL to keep edits across deploys.
             </p>
           )}
           <button
             onClick={persist}
             disabled={save === "saving"}
-            className="w-full rounded-lg bg-[var(--tier-prime)] px-3 py-2 text-xs font-semibold text-[#03131c] disabled:opacity-50"
+            className="w-full rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-semibold text-[#0a0a0b] disabled:opacity-50"
           >
             {save === "saving" ? "Saving…" : save === "saved" ? "Saved ✓" : "Save changes"}
           </button>
@@ -234,7 +234,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
           <p
             className={`rounded-full border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] backdrop-blur ${
               placing
-                ? "border-[var(--tier-title)] bg-[rgb(217_240_60/0.15)] text-[var(--tier-title)]"
+                ? "border-[var(--tier-title)] bg-[rgb(255_212_0/0.15)] text-[var(--tier-title)]"
                 : "border-[var(--line)] bg-[var(--panel)] text-[var(--ink-dim)]"
             }`}
           >
@@ -256,7 +256,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
       </div>
 
       {/* inspector */}
-      <aside className="scroll-slim w-full shrink-0 overflow-y-auto border-t border-[var(--line)] bg-[rgb(4_11_18/0.9)] p-4 lg:w-80 lg:border-l lg:border-t-0">
+      <aside className="scroll-slim w-full shrink-0 overflow-y-auto border-t border-[var(--line)] bg-[rgb(10_10_11/0.9)] p-4 lg:w-80 lg:border-l lg:border-t-0">
         {!active ? (
           <p className="text-xs text-[var(--ink-faint)]">Pick a slot.</p>
         ) : (
@@ -265,7 +265,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
               <h2 className="text-sm font-semibold">{active.label}</h2>
               <button
                 onClick={() => removeSlot(active.id)}
-                className="text-[11px] text-red-400/80 hover:text-red-400"
+                className="text-[11px] text-[var(--accent)]/80 hover:text-[var(--accent)]"
               >
                 Delete
               </button>
@@ -453,7 +453,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
                   <Field label="Brand colour">
                     <input
                       type="color"
-                      value={active.sponsor?.color ?? "#d9f03c"}
+                      value={active.sponsor?.color ?? "#ffd400"}
                       onChange={(e) =>
                         patch(active.id, (s) => ({
                           ...s,
@@ -471,7 +471,7 @@ export function AdminSlots({ initial, persistent }: { initial: Slot[]; persisten
                         const f = e.target.files?.[0];
                         if (f) uploadLogo(f);
                       }}
-                      className="w-full text-[11px] text-[var(--ink-dim)] file:mr-2 file:rounded-md file:border-0 file:bg-[rgb(56_189_248/0.15)] file:px-2 file:py-1 file:text-[11px] file:text-[var(--ink)]"
+                      className="w-full text-[11px] text-[var(--ink-dim)] file:mr-2 file:rounded-md file:border-0 file:bg-[rgb(255_255_255/0.15)] file:px-2 file:py-1 file:text-[11px] file:text-[var(--ink)]"
                     />
                     {active.sponsor?.logo && (
                       <p className="mt-1 truncate font-mono text-[10px] text-[var(--ink-faint)]">
@@ -494,7 +494,7 @@ const STEP = 0.03;
 /** Four-way nudge. Each press slides the slot a step across the surface. */
 function Dpad({ onNudge }: { onNudge: (dx: number, dy: number) => void }) {
   const btn =
-    "grid h-9 place-items-center rounded-lg border border-[var(--line)] text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)] active:bg-[rgb(56_189_248/0.12)]";
+    "grid h-9 place-items-center rounded-lg border border-[var(--line)] text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)] active:bg-[rgb(255_255_255/0.12)]";
   return (
     <div className="grid w-32 grid-cols-3 grid-rows-3 gap-1">
       <span />
@@ -513,7 +513,7 @@ function Dpad({ onNudge }: { onNudge: (dx: number, dy: number) => void }) {
 }
 
 const INPUT =
-  "w-full rounded-lg border border-[var(--line)] bg-[rgb(3_10_18/0.6)] px-2.5 py-1.5 text-xs text-[var(--ink)] outline-none focus:border-[var(--line-strong)]";
+  "w-full rounded-lg border border-[var(--line)] bg-[rgb(10_10_11/0.6)] px-2.5 py-1.5 text-xs text-[var(--ink)] outline-none focus:border-[var(--line-strong)]";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (

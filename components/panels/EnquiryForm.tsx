@@ -78,7 +78,7 @@ export function EnquiryForm({ slot, onDone }: { slot: Slot; onDone: () => void }
         className="absolute left-[-9999px] h-0 w-0 opacity-0"
       />
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
+      {error && <p className="text-xs text-[var(--accent)]">{error}</p>}
 
       <div className="flex gap-2 pt-1">
         <button
@@ -91,7 +91,7 @@ export function EnquiryForm({ slot, onDone }: { slot: Slot; onDone: () => void }
         <button
           type="submit"
           disabled={state === "sending"}
-          className="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#03131c] transition disabled:opacity-50"
+          className="flex-1 rounded-lg px-4 py-2.5 text-sm font-semibold text-[#0a0a0b] transition disabled:opacity-50"
           style={{ background: `var(--tier-${slot.tier})` }}
         >
           {state === "sending" ? "Sending…" : "Send enquiry"}
@@ -115,12 +115,12 @@ function Field({
   textarea?: boolean;
 }) {
   const cls =
-    "w-full rounded-lg border border-[var(--line)] bg-[rgb(3_10_18/0.6)] px-3 py-2 text-sm text-[var(--ink)] outline-none transition placeholder:text-[var(--ink-faint)] focus:border-[var(--line-strong)]";
+    "w-full rounded-lg border border-[var(--line)] bg-[rgb(10_10_11/0.6)] px-3 py-2 text-sm text-[var(--ink)] outline-none transition placeholder:text-[var(--ink-faint)] focus:border-[var(--line-strong)]";
   return (
     <label className="block">
       <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
         {label}
-        {required && <span className="ml-1 text-[var(--tier-prime)]">*</span>}
+        {required && <span className="ml-1 text-[var(--accent)]">*</span>}
       </span>
       {textarea ? (
         <textarea name={name} rows={2} className={cls} />

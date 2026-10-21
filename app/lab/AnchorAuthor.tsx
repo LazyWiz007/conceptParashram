@@ -67,7 +67,7 @@ export function AnchorAuthor() {
 
   return (
     <div className="flex h-[100svh] w-full">
-      <aside className="flex w-72 shrink-0 flex-col border-r border-[var(--line)] bg-[rgb(4_11_18/0.9)]">
+      <aside className="flex w-72 shrink-0 flex-col border-r border-[var(--line)] bg-[rgb(10_10_11/0.9)]">
         <header className="border-b border-[var(--line)] px-4 py-3">
           <h1 className="text-sm font-semibold">Slot anchors</h1>
           <p className="mt-1 text-xs text-[var(--ink-dim)]">
@@ -97,7 +97,7 @@ export function AnchorAuthor() {
                   setMove(cameraForAnchor(placed[s.id] ?? s.anchor));
                 }}
                 className={`flex w-full items-center gap-2 px-4 py-2 text-left text-xs transition ${
-                  active === s.id ? "bg-[rgb(56_189_248/0.14)]" : "hover:bg-[rgb(56_189_248/0.06)]"
+                  active === s.id ? "bg-[rgb(255_255_255/0.14)]" : "hover:bg-[rgb(255_255_255/0.06)]"
                 }`}
               >
                 <span className="h-1.5 w-1.5 rounded-full" style={{ background: TIER_HEX[s.tier] }} />
@@ -110,7 +110,7 @@ export function AnchorAuthor() {
         <div className="border-t border-[var(--line)] p-3">
           <button
             onClick={() => navigator.clipboard.writeText(json)}
-            className="w-full rounded-lg bg-[var(--tier-prime)] px-3 py-2 text-xs font-semibold text-[#03131c]"
+            className="w-full rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-semibold text-[#0a0a0b]"
           >
             Copy JSON
           </button>
@@ -130,7 +130,7 @@ export function AnchorAuthor() {
           <textarea
             readOnly
             value={json}
-            className="scroll-slim mt-2 h-28 w-full rounded-lg border border-[var(--line)] bg-[rgb(3_10_18/0.6)] p-2 font-mono text-[10px] text-[var(--ink-dim)]"
+            className="scroll-slim mt-2 h-28 w-full rounded-lg border border-[var(--line)] bg-[rgb(10_10_11/0.6)] p-2 font-mono text-[10px] text-[var(--ink-dim)]"
           />
         </div>
       </aside>

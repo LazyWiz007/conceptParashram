@@ -8,13 +8,13 @@ export function DocumentarySection() {
       eyebrow="The documentary"
       title={documentary.title}
       lede={documentary.blurb}
-      className="bg-[rgb(4_11_18/0.6)]"
+      className="bg-[rgb(10_10_11/0.6)]"
     >
       <ul className="scroll-slim -mx-5 flex snap-x snap-mandatory scroll-pl-5 gap-4 overflow-x-auto px-5 pb-4 sm:-mx-8 sm:scroll-pl-8 sm:px-8">
         {documentary.episodes.map((ep) => (
           <li
             key={ep.n}
-            className="flex w-[15rem] shrink-0 snap-start flex-col rounded-2xl border border-[var(--line)] bg-[rgb(6_16_26/0.6)] p-5"
+            className="flex w-[15rem] shrink-0 snap-start flex-col rounded-2xl border border-[var(--line)] bg-[rgb(16_16_18/0.6)] p-5"
           >
             <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-[var(--tier-title)]">
               Ep {String(ep.n).padStart(2, "0")}
@@ -25,7 +25,7 @@ export function DocumentarySection() {
         ))}
       </ul>
 
-      <div className="mt-8 grid gap-6 rounded-2xl border border-[var(--line)] bg-[rgb(6_16_26/0.4)] p-6 md:grid-cols-[1fr_auto]">
+      <div className="mt-8 grid gap-6 rounded-2xl border border-[var(--line)] bg-[rgb(16_16_18/0.4)] p-6 md:grid-cols-[1fr_auto]">
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
             Every sponsor gets

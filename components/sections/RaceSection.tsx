@@ -26,7 +26,7 @@ export function RaceSection() {
           ))}
         </div>
 
-        <dl className="h-fit space-y-4 rounded-2xl border border-[var(--line)] bg-[rgb(6_16_26/0.5)] p-5">
+        <dl className="h-fit space-y-4 rounded-2xl border border-[var(--line)] bg-[rgb(16_16_18/0.5)] p-5">
           {[
             ["Date", when],
             ["Where", race.location],

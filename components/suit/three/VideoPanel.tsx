@@ -4,7 +4,7 @@ import { useVideoTexture } from "@react-three/drei";
 import { Suspense, useEffect } from "react";
 import * as THREE from "three";
 
-const NEON = "#38d9ff";
+import { NEON } from "./Chamber3D";
 
 function Screen({ src, width, height }: { src: string; width: number; height: number }) {
   const texture = useVideoTexture(src, {
@@ -73,7 +73,7 @@ export function VideoPanel({
       </lineSegments>
       <mesh position={[0, 0, -0.02]}>
         <planeGeometry args={[fw, fh]} />
-        <meshBasicMaterial color="#061119" />
+        <meshBasicMaterial color="#0c0c0d" />
       </mesh>
 
       <Suspense fallback={null}>

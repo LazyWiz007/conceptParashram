@@ -27,7 +27,7 @@ export class CanvasBoundary extends React.Component<
           data-scene-error
           className="grid h-full w-full place-items-center p-6 text-center"
         >
-          <pre className="max-w-xl overflow-auto whitespace-pre-wrap text-left text-xs text-red-300">
+          <pre className="max-w-xl overflow-auto whitespace-pre-wrap text-left text-xs text-[var(--accent)]">
             {this.state.error.message}
             {"\n\n"}
             {this.state.error.stack?.split("\n").slice(0, 8).join("\n")}

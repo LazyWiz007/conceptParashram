@@ -31,7 +31,7 @@ export default async function Admin({
       <header className="mb-6 flex flex-wrap items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-4">
           <h1 className="text-2xl font-semibold">Enquiries</h1>
-          <a href="/admin/slots" className="text-sm text-[var(--tier-prime)] underline-offset-4 hover:underline">
+          <a href="/admin/slots" className="text-sm text-[var(--accent)] underline-offset-4 hover:underline">
             Edit slots →
           </a>
         </div>
@@ -48,7 +48,7 @@ export default async function Admin({
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-[var(--line)]">
           <table className="w-full text-left text-sm">
-            <thead className="bg-[rgb(6_16_26/0.6)] font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+            <thead className="bg-[rgb(16_16_18/0.6)] font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
               <tr>
                 {["When", "Slot", "Company", "Contact", "Email", "Phone", "Message"].map((h) => (
                   <th key={h} className="whitespace-nowrap px-3 py-2.5 font-normal">
@@ -57,7 +57,7 @@ export default async function Admin({
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-[rgb(56_189_248/0.08)]">
+            <tbody className="divide-y divide-[rgb(255_255_255/0.08)]">
               {rows.map((r, i) => {
                 const slot = byId.get(r.slot_id);
                 return (
