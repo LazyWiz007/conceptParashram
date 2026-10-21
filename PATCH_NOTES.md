@@ -4,6 +4,22 @@ Changes made on top of the cloned repo (base commit `066e4bb`). Newest first.
 
 ## 2026-10-21
 
+### Second video screen, seen from behind the suit
+- **What it is:** the training clip now also plays on a screen in front of
+  the suit, turned to face it. When you rotate round to the back, there's
+  footage behind the suit just like from the front.
+- **Placement:**
+  - It stands at z = 9.6, beyond the camera's orbit of about 7.2. From the
+    front it's always behind the camera, so the front view is unchanged.
+  - It's about 1.7× the size of the front screen (4.6 × 5.96), to make up
+    for the extra distance, so both screens look the same size in shot.
+  - It sits in the gap between the two pillars at that end of the room, with
+    the same yellow frame.
+- **One video:** both screens use the same video element, because drei caches
+  it by URL. They play in sync and nothing extra is downloaded.
+- `VideoPanel` takes a new `rotation` prop so a screen can face any direction.
+- Files: `components/suit/three/Stage3D.tsx`, `VideoPanel.tsx`.
+
 ### Warp-speed streaks in the sky
 - **The effect:** thin white and yellow streaks of light now fly out of the
   far end of the arch tunnel, as if the room were rushing forward. Each

@@ -86,6 +86,24 @@ export function Stage3D({
       <Suspense fallback={null}>
         <Chamber3D />
         {video && <VideoPanel src={video} />}
+        {/*
+          The same clip on a screen facing the suit's back, so turning the suit
+          round still shows footage behind it. It stands beyond the camera's
+          orbit (~7.2), so from the front it is always behind the camera and
+          never in shot. It is scaled up by the extra distance — about 1.7× —
+          so it reads the same size as the front screen, and sits in the gap
+          between the two pillars back here. drei caches the video by URL, so
+          both screens share one <video> and stay in sync.
+        */}
+        {video && (
+          <VideoPanel
+            src={video}
+            position={[0, 0.9, 9.6]}
+            rotation={[0, Math.PI, 0]}
+            width={4.6}
+            height={5.96}
+          />
+        )}
 
         <group onClick={handleSuitClick}>
           <SuitModel

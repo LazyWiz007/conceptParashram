@@ -53,11 +53,14 @@ function Screen({ src, width, height }: { src: string; width: number; height: nu
 export function VideoPanel({
   src,
   position = [0, 0.35, -2.6],
+  rotation = [0, 0, 0],
   width = 2.7,
   height = 3.5,
 }: {
   src: string;
   position?: [number, number, number];
+  /** The screen shows on its +z face; turn it to face the suit from elsewhere. */
+  rotation?: [number, number, number];
   width?: number;
   height?: number;
 }) {
@@ -65,7 +68,7 @@ export function VideoPanel({
   const fh = height + 0.14;
 
   return (
-    <group position={position}>
+    <group position={position} rotation={rotation}>
       {/* neon frame, drawn whether or not the video ever arrives */}
       <lineSegments>
         <edgesGeometry args={[new THREE.PlaneGeometry(fw, fh)]} />
