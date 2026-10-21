@@ -52,7 +52,17 @@ export const social = {
   posts: 168,
   followers: 9643,
   following: 1647,
+  /** Screenshot of the profile, as proof the numbers are real. */
+  screenshot: "/media/instagram.webp",
 };
+
+/** The About carousel, in order. */
+export const aboutPhotos = [
+  { src: "/media/about/04-goa-start.webp", caption: "IRONMAN 70.3 Goa" },
+  { src: "/media/about/01-bike-flyover.webp", caption: "Bike leg" },
+  { src: "/media/about/02-lv-rain.webp", caption: "Training in the wet" },
+  { src: "/media/about/03-5i50.webp", caption: "5i50 Chennai" },
+];
 
 /**
  * Lifted from the Instagram highlights. Some of these were brand shoots rather

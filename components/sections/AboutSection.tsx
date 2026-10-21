@@ -1,12 +1,10 @@
 import Image from "next/image";
-import { athlete, race, social, track } from "@/content/site";
+import { aboutPhotos, athlete, race, social, track } from "@/content/site";
+import { PhotoCarousel } from "./PhotoCarousel";
 import { compact } from "@/lib/format";
-import { listPhotos } from "@/lib/photos";
 import { Section } from "./Section";
 
-export async function AboutSection() {
-  const photos = await listPhotos();
-  const portrait = photos[0] ?? null;
+export function AboutSection() {
 
   const when = race.dateConfirmed
     ? new Date(race.date).toLocaleDateString("en-IN", {
@@ -19,18 +17,7 @@ export async function AboutSection() {
   return (
     <Section id="about" eyebrow="About" title={athlete.name} lede={athlete.tagline}>
       <div className="grid gap-10 md:grid-cols-[1fr_1.15fr] md:gap-12">
-        {portrait && (
-          <div className="relative aspect-[4/5] overflow-hidden rounded-2xl border border-[var(--line)]">
-            <Image
-              src={portrait}
-              alt={athlete.name}
-              fill
-              sizes="(max-width: 768px) 92vw, 36vw"
-              className="object-cover"
-              priority
-            />
-          </div>
-        )}
+        <PhotoCarousel photos={aboutPhotos} alt={athlete.name} />
 
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
@@ -72,6 +59,41 @@ export async function AboutSection() {
             target="_blank"
             rel="noreferrer"
             className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--line)] px-4 py-2 text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)]"
+          >
+            {athlete.handle} ↗
+          </a>
+        </div>
+      </div>
+
+      <div className="mt-14 grid gap-8 border-t border-[var(--line)] pt-10 md:grid-cols-[1.2fr_1fr] md:items-center">
+        <a
+          href={athlete.instagram}
+          target="_blank"
+          rel="noreferrer"
+          className="group relative block overflow-hidden rounded-2xl border border-[var(--line)] transition hover:border-[var(--line-strong)]"
+        >
+          <Image
+            src={social.screenshot}
+            alt={`${athlete.handle} on Instagram`}
+            width={1293}
+            height={936}
+            sizes="(max-width: 768px) 92vw, 46vw"
+            className="w-full"
+          />
+        </a>
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-[var(--accent)]">
+            Not a hypothetical
+          </p>
+          <p className="mt-3 text-lg leading-relaxed text-[var(--ink-dim)]">
+            {compact(social.followers)} people already follow the training. They will watch this
+            race whether or not anyone sponsors it — your logo just comes along.
+          </p>
+          <a
+            href={athlete.instagram}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-5 inline-flex items-center gap-2 rounded-full border border-[var(--line)] px-4 py-2 text-sm text-[var(--ink-dim)] transition hover:border-[var(--line-strong)] hover:text-[var(--ink)]"
           >
             {athlete.handle} ↗
           </a>
