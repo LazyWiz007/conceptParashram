@@ -4,6 +4,64 @@ Changes made on top of the cloned repo (base commit `066e4bb`). Newest first.
 
 ## 2026-10-22
 
+### Enquiry form hardened against spam
+Every enquiry can send two emails, one of them to an address the visitor
+typed in, so the form was the one place the site could be used to send spam.
+The limits are listed in `LIMITS` at the top of `app/api/enquiry/route.ts`.
+- **Confirmation email can't carry spam:**
+  - It no longer repeats anything the visitor wrote. It used to say
+    "Thanks {name}", so a spammer could put their text in the name and have
+    the site mail it to anyone. Now it contains only our slot name and price.
+  - An address gets at most one confirmation a day.
+  - It ends "If you did not send this, you can ignore this email."
+- **Bot traps:** these get a fake success, so the bot learns nothing.
+  - The hidden field, as before.
+  - New: the form sends the time it was opened. Anything sent within 3
+    seconds, older than a day, or with no open time at all (a script posting
+    straight to the API) is dropped.
+- **No links in name or company:** refused, with a pointer to the website
+  field.
+- **Per IP:** 3 enquiries per 10 minutes, and 8 per day. This is best effort,
+  in memory per server instance. The tracking map is now bounded so it can't
+  grow forever, and `x-real-ip` is preferred.
+- **Per email address:** 2 enquiries a day, and a repeat for the same slot
+  within a day is dropped as a duplicate.
+- **Site-wide:** 20 enquiries an hour and 60 a day; past that, new ones are
+  refused and a warning is logged.
+  - The per-address and site-wide limits count the saved enquiries in
+    Supabase or the memory store, so they hold across server instances and
+    restarts.
+- Email addresses are saved lowercased so the per-address count matches.
+- **Log lines:** `[enquiry] dropped: …`, `saved for …` and
+  `confirmation skipped`, so abuse is easy to spot.
+- **Tested** with email sending disabled for the run. Every rule behaved as
+  described:
+  - a no-open-time script post, a 1-second submit and the honeypot were all
+    dropped
+  - a link in the name was refused
+  - a duplicate was dropped, a second slot was saved and a third was refused
+  - the 4th enquiry from one IP was refused, and so was the 21st in an hour
+  - the real form in the browser still got through
+- **Not covered:** someone with many IPs and many addresses can still send
+  up to 60 a day before the site-wide cap. A CAPTCHA such as Cloudflare
+  Turnstile would close that, but it needs an account and keys.
+- Files: `app/api/enquiry/route.ts`, `lib/db.ts` (new `countEnquiries`),
+  `components/panels/EnquiryForm.tsx` (sends `openedAt`).
+
+### Resend delivery confirmed
+- The enquiry route now also logs Resend's message ID for each accepted
+  email (`[enquiry] … email accepted, id …`), not only failures, so the log
+  proves an email went out.
+- **Test:** one enquiry was sent through `/api/enquiry` with
+  `pgore.work@gmail.com` as both recipient and sponsor. Resend accepted both
+  emails:
+  - Athlete notification: `01a160a9-041e-7bb6-aa8c-31d2f608afaa`
+  - Sponsor confirmation: `01a160a9-0389-7570-a748-ffe4ab07d0f8`
+- The sponsor confirmation only went through because it was addressed to
+  the account's own inbox. Real sponsors' confirmations will still be refused
+  until a sending domain is verified in Resend.
+- File: `app/api/enquiry/route.ts`.
+
 ### Preview buttons are easy to find
 - **The problem:** "Change logo" and "Stop preview" were small text links
   under the preview's description, easy to miss even though they're the only

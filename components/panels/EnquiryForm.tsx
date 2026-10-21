@@ -9,13 +9,16 @@ type State = "idle" | "sending" | "sent" | "error";
 export function EnquiryForm({ slot, onDone }: { slot: Slot; onDone: () => void }) {
   const [state, setState] = useState<State>("idle");
   const [error, setError] = useState<string | null>(null);
+  // when the form appeared; the server drops anything sent faster than a
+  // person can type, and anything that arrives without this at all
+  const [openedAt] = useState(() => Date.now());
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setState("sending");
     setError(null);
     const fd = new FormData(e.currentTarget);
-    const body = { slotId: slot.id, ...Object.fromEntries(fd) };
+    const body = { slotId: slot.id, openedAt, ...Object.fromEntries(fd) };
 
     try {
       const res = await fetch("/api/enquiry", {

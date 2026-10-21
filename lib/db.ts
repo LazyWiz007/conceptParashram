@@ -146,6 +146,34 @@ export async function saveEnquiry(row: EnquiryRow): Promise<void> {
   if (error) throw new Error(error.message);
 }
 
+/**
+ * How many enquiries match, counted from the store itself rather than from
+ * memory, so the spam limits hold across serverless instances and restarts.
+ * `email` is compared lowercased; the enquiry route saves it that way.
+ */
+export async function countEnquiries(filter: {
+  since: Date;
+  email?: string;
+  slotId?: string;
+}): Promise<number> {
+  const since = filter.since.toISOString();
+  const sb = db();
+  if (!sb) {
+    return mem.enquiries.filter(
+      (r) =>
+        String(r.created_at) >= since &&
+        (filter.email === undefined || String(r.email).toLowerCase() === filter.email) &&
+        (filter.slotId === undefined || r.slot_id === filter.slotId),
+    ).length;
+  }
+  let q = sb.from("enquiries").select("id", { count: "exact", head: true }).gte("created_at", since);
+  if (filter.email !== undefined) q = q.eq("email", filter.email);
+  if (filter.slotId !== undefined) q = q.eq("slot_id", filter.slotId);
+  const { count, error } = await q;
+  if (error) throw new Error(error.message);
+  return count ?? 0;
+}
+
 export async function listEnquiries() {
   const sb = db();
   if (!sb) return mem.enquiries;
