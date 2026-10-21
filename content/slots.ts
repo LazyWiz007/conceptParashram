@@ -75,37 +75,24 @@ export const SLOTS: Slot[] = [
     pitch:
       "The finish-line photograph. Every frame shot from the front — the arch, the podium, the press wall — puts this logo dead centre.",
     anchor: {
-      position: [0.077, 0.97, 0.367],
-      rotation: [-0.303, -0.134, -0.042],
-      size: [0.62, 0.26, 0.7],
+      position: [0.0, 0.97, 0.361],
+      rotation: [-0.243, 0.279, 0.068],
+      size: [0.8, 0.24, 0.8],
     },
   },
   {
-    id: "chest_left",
-    label: "Left chest",
+    id: "chest_band",
+    label: "Chest band",
     tier: "prime",
     price: TIER_PRICE.prime,
     status: "open",
-    size: "12 × 10 cm",
-    pitch: "Classic sponsor position. Reads clearly in every head-on photo and on the bike.",
+    size: "26 × 8 cm",
+    pitch:
+      "Full width across the chest, under the title band. The placement people actually read in a finish-line photo, because it sits where the eye lands.",
     anchor: {
-      position: [0.27, 0.548, 0.368],
-      rotation: [0.083, 0.554, -0.044],
-      size: [0.36, 0.3, 0.7],
-    },
-  },
-  {
-    id: "chest_right",
-    label: "Right chest",
-    tier: "prime",
-    price: TIER_PRICE.prime,
-    status: "open",
-    size: "12 × 10 cm",
-    pitch: "Mirror of the left chest. Paired, the two read as a brand partnership rather than a patch.",
-    anchor: {
-      position: [-0.236, 0.547, 0.387],
-      rotation: [0.068, -0.434, 0.029],
-      size: [0.36, 0.3, 0.7],
+      position: [0.0, 0.56, 0.415],
+      rotation: [-0.052, 0.057, 0.003],
+      size: [0.66, 0.21, 0.8],
     },
   },
   {
@@ -131,9 +118,9 @@ export const SLOTS: Slot[] = [
     size: "8 × 7 cm",
     pitch: "Outer upper arm. Never still, never out of frame — it is the placement that shows up in video.",
     anchor: {
-      position: [0.593, 0.678, 0.057],
-      rotation: [0.399, -0.998, 0.341],
-      size: [0.26, 0.22, 0.7],
+      position: [0.824, 0.72, 0.0],
+      rotation: [-0.403, 0.937, 0.331],
+      size: [0.26, 0.22, 0.8],
     },
   },
   {
@@ -145,9 +132,9 @@ export const SLOTS: Slot[] = [
     size: "8 × 7 cm",
     pitch: "Outer upper arm, right side. The arm that faces the camera on most bike-course passes.",
     anchor: {
-      position: [-0.427, 0.664, 0.226],
-      rotation: [0.109, -0.831, 0.081],
-      size: [0.26, 0.22, 0.7],
+      position: [-0.822, 0.72, 0.0],
+      rotation: [-0.332, -0.927, -0.269],
+      size: [0.26, 0.22, 0.8],
     },
   },
   {
@@ -188,9 +175,9 @@ export const SLOTS: Slot[] = [
     pitch:
       "The single most-seen surface in the sport. Everyone racing behind reads it for hours, and so does every follow camera on the run course.",
     anchor: {
-      position: [-0.098, 0.895, -0.4],
-      rotation: [3.038, 0.292, -3.112],
-      size: [0.62, 0.26, 0.7],
+      position: [0.0, 0.9, -0.375],
+      rotation: [3.01, 0.118, -3.126],
+      size: [0.76, 0.25, 0.8],
     },
   },
   {
@@ -261,6 +248,64 @@ export const SLOTS: Slot[] = [
       position: [0.122, -0.689, -0.373],
       rotation: [2.601, -0.202, 3.022],
       size: [0.22, 0.26, 0.7],
+    },
+  },
+  {
+    id: "shoulder_left",
+    label: "Left shoulder",
+    tier: "support",
+    price: TIER_PRICE.support,
+    status: "open",
+    size: "9 × 5 cm",
+    pitch:
+      "Top of the shoulder. Small, but it is the one spot that stays in frame whether the camera is in front, beside or above you.",
+    anchor: {
+      position: [0.35, 1.19, 0.223],
+      rotation: [-0.592, 0.311, 0.203],
+      size: [0.28, 0.15, 0.8],
+    },
+  },
+  {
+    id: "shoulder_right",
+    label: "Right shoulder",
+    tier: "support",
+    price: TIER_PRICE.support,
+    status: "open",
+    size: "9 × 5 cm",
+    pitch: "Mirror of the left shoulder. Sold as a pair if you want both.",
+    anchor: {
+      position: [-0.35, 1.19, 0.222],
+      rotation: [-0.585, -0.283, -0.183],
+      size: [0.28, 0.15, 0.8],
+    },
+  },
+  {
+    id: "side_left",
+    label: "Left side panel",
+    tier: "core",
+    price: TIER_PRICE.core,
+    status: "open",
+    size: "8 × 22 cm",
+    pitch:
+      "Down the ribs. A tall vertical panel that is readable from the side for the whole bike leg, which is five of the eleven hours.",
+    anchor: {
+      position: [0.377, 0.4, 0.235],
+      rotation: [0.185, 0.864, -0.142],
+      size: [0.2, 0.52, 0.8],
+    },
+  },
+  {
+    id: "side_right",
+    label: "Right side panel",
+    tier: "core",
+    price: TIER_PRICE.core,
+    status: "open",
+    size: "8 × 22 cm",
+    pitch: "Mirror of the left side panel. The drive side, which is where press photographers shoot from.",
+    anchor: {
+      position: [-0.377, 0.4, 0.235],
+      rotation: [0.235, -0.814, 0.172],
+      size: [0.2, 0.52, 0.8],
     },
   },
 ];
