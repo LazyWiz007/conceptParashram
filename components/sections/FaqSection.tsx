@@ -1,4 +1,5 @@
 import { athlete, faq } from "@/content/site";
+import { real } from "@/lib/draft";
 import { Section } from "./Section";
 
 export function FaqSection() {
@@ -17,23 +18,26 @@ export function FaqSection() {
         <a href={`mailto:${athlete.email}`} className="text-[var(--ink)] underline-offset-4 hover:underline">
           {athlete.email}
         </a>
-        <span className="text-[var(--ink-dim)]">{athlete.phone}</span>
-        <a
-          href={athlete.instagram}
-          target="_blank"
-          rel="noreferrer"
-          className="text-[var(--ink-dim)] transition hover:text-[var(--ink)]"
-        >
-          Instagram ↗
-        </a>
-        <a
-          href={athlete.strava}
-          target="_blank"
-          rel="noreferrer"
-          className="text-[var(--ink-dim)] transition hover:text-[var(--ink)]"
-        >
-          Strava ↗
-        </a>
+        {real(athlete.phone) && <span className="text-[var(--ink-dim)]">{athlete.phone}</span>}
+        {(
+          [
+            ["Instagram", athlete.instagram],
+            ["Strava", athlete.strava],
+            ["YouTube", athlete.youtube],
+          ] as const
+        )
+          .filter(([, href]) => real(href))
+          .map(([name, href]) => (
+            <a
+              key={name}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[var(--ink-dim)] transition hover:text-[var(--ink)]"
+            >
+              {name} ↗
+            </a>
+          ))}
       </div>
     </Section>
   );

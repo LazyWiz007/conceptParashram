@@ -1,4 +1,5 @@
 import { documentary } from "@/content/site";
+import { real } from "@/lib/draft";
 import { Section } from "./Section";
 
 export function DocumentarySection() {
@@ -40,18 +41,19 @@ export function DocumentarySection() {
           </ul>
         </div>
         <dl className="grid h-fit gap-3 text-sm md:text-right">
-          <div>
-            <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
-              Produced by
-            </dt>
-            <dd className="mt-0.5">{documentary.producer}</dd>
-          </div>
-          <div>
-            <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
-              Releasing on
-            </dt>
-            <dd className="mt-0.5">{documentary.platform}</dd>
-          </div>
+          {[
+            ["Produced by", real(documentary.producer)],
+            ["Releasing on", real(documentary.platform)],
+          ]
+            .filter(([, v]) => v)
+            .map(([k, v]) => (
+              <div key={k as string}>
+                <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
+                  {k}
+                </dt>
+                <dd className="mt-0.5">{v}</dd>
+              </div>
+            ))}
         </dl>
       </div>
     </Section>
