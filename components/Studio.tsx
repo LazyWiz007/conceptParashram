@@ -111,9 +111,11 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
           {openCount} places on the suit I will race {race.name} in. Spin it, pick one, put your
           logo on it.
         </p>
-        <div className="mt-3">
-          <Countdown iso={race.date} compactLayout />
-        </div>
+        {race.dateConfirmed && (
+          <div className="mt-3">
+            <Countdown iso={race.date} compactLayout />
+          </div>
+        )}
       </header>
 
       {/* hover readout, so the suit explains itself before anything is clicked */}

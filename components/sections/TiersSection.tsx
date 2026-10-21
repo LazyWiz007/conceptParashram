@@ -22,26 +22,26 @@ export function TiersSection() {
             >
               <header className="flex items-baseline justify-between gap-4">
                 <h3
-                  className="font-mono text-xs uppercase tracking-[0.2em]"
+                  className="font-mono text-sm uppercase tracking-[0.2em]"
                   style={{ color: `var(--tier-${tier.id})` }}
                 >
                   {tier.name}
                 </h3>
-                <p className="text-2xl font-semibold">{inr(slots[0]?.price ?? 0)}</p>
+                <p className="text-3xl font-semibold">{inr(slots[0]?.price ?? 0)}</p>
               </header>
 
-              <p className="mt-3 text-sm leading-relaxed text-[var(--ink-dim)]">{tier.blurb}</p>
+              <p className="mt-3 text-base leading-relaxed text-[var(--ink-dim)]">{tier.blurb}</p>
 
               <ul className="mt-4 space-y-1.5">
                 {tier.deliverables.map((d) => (
-                  <li key={d} className="flex gap-2.5 text-sm text-[var(--ink-dim)]">
+                  <li key={d} className="flex gap-2.5 text-base text-[var(--ink-dim)]">
                     <span style={{ color: `var(--tier-${tier.id})` }}>—</span>
                     <span>{d}</span>
                   </li>
                 ))}
               </ul>
 
-              <p className="mt-5 border-t border-[var(--line)] pt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+              <p className="mt-5 border-t border-[var(--line)] pt-3.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
                 {open} of {slots.length} open · {slots.map((s) => s.label).join(", ")}
               </p>
             </article>

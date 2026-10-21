@@ -8,19 +8,21 @@
   --haze: 255 255 255;
 
   --ink: #f2f2f2;
-  --ink-dim: #a3a3a3;
-  --ink-faint: #666666;
+  --ink-dim: #b9b9bd;
+  --ink-faint: #85858c;
 
   --line: rgb(255 255 255 / 0.14);
   --line-strong: rgb(255 255 255 / 0.38);
   --panel: rgb(14 14 16 / 0.86);
   --accent: #ffd400;
 
-  /* tiers */
+  /* Tiers were four shades of the same yellow, so a sponsor could not tell
+     them apart on the suit or in the list. Gold stays the lead; the rest take
+     the swim/bike/run colours. */
   --tier-title: #ffd400;
-  --tier-prime: #ffe14d;
-  --tier-core: #ffeb85;
-  --tier-support: #fff3b8;
+  --tier-prime: #ff5a36;
+  --tier-core: #22c3f0;
+  --tier-support: #a78bfa;
 
   --sold: #ffffff;
 }

@@ -1,5 +1,5 @@
 import { Studio } from "@/components/Studio";
-import { RaceSection } from "@/components/sections/RaceSection";
+import { AboutSection } from "@/components/sections/AboutSection";
 import { ReachSection } from "@/components/sections/ReachSection";
 import { DocumentarySection } from "@/components/sections/DocumentarySection";
 import { TiersSection } from "@/components/sections/TiersSection";
@@ -17,7 +17,7 @@ export default async function Home() {
   return (
     <main>
       <Studio slots={slots} avatar={avatar} />
-      <RaceSection />
+      <AboutSection />
       <ReachSection />
       <DocumentarySection />
       <TiersSection />

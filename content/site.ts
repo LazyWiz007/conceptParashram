@@ -26,17 +26,32 @@ export const athlete = {
 };
 
 export const race = {
-  name: "IRONMAN", // TODO: which race
-  distance: "3.8 km swim · 180 km bike · 42.2 km run",
-  location: "TODO — city, country",
-  /** ISO date. Drives the countdown. TODO: real race date. */
+  name: "IRONMAN 70.3 Goa",
+  short: "70.3 Goa",
+  distance: "1.9 km swim · 90 km bike · 21.1 km run",
+  location: "Goa, India",
+  /**
+   * ISO date, drives the countdown.
+   * TODO: the 2027 Goa date is not public yet — give it to me and flip
+   * dateConfirmed. Until then the countdown is hidden and the date reads
+   * "to be confirmed", because a wrong race date in front of a sponsor is
+   * worse than no date at all.
+   */
   date: "2027-03-14T06:00:00+05:30",
-  goal: "Finish under 12 hours.", // TODO: your actual target
+  dateConfirmed: false,
+  goal: "Finish under 5 hours 30.", // TODO: confirm your actual target
   story: [
     "I run a company and I race. Most people pick one.",
-    "An Ironman is a 3.8 km swim, a 180 km ride and then a marathon, back to back, inside a single day. I have already done the 70.3, Hyrox, the 5i50 and a string of MTB and road events — this is the full distance, and it is the hardest thing I have signed up for. Training sits either side of a working day, roughly 18 hours a week, most of it before sunrise.",
-    "This page is how I cover the rest: the entry, the travel, the bike, the coaching, and a seven-part film crew following the whole thing.",
+    "A 70.3 is a 1.9 km swim, a 90 km ride and a half marathon, back to back, in one morning. I have raced Hyrox, the 5i50, the Heritage Run and a string of road and MTB events to get here. Training sits either side of a working day — roughly 18 hours a week, most of it before sunrise, all of it paid for out of my own pocket.",
+    "This page covers the rest: the entry, the travel, the bike, the coaching, and a seven-part film crew following the whole thing.",
   ],
+};
+
+/** Straight off the public Instagram profile, 21 Oct 2026. */
+export const social = {
+  posts: 168,
+  followers: 9643,
+  following: 1647,
 };
 
 /**
@@ -62,9 +77,9 @@ export const reach = {
     { label: "YouTube", value: 0, suffix: "subscribers" }, // TODO
   ],
   raceDay: [
-    { label: "Spectators on course", value: "TODO" },
-    { label: "Athletes in the field", value: "TODO" },
-    { label: "Official race photos", value: "TODO" },
+    { label: "Spectators on course", value: "TODO" }, // TODO
+    { label: "Athletes in the field", value: "TODO" }, // TODO
+    { label: "Official race photos", value: "TODO" }, // TODO
   ],
   note:
     "Every sponsor gets a post-race report with the real numbers: impressions, reach, saves, and the race photos their logo appears in.",
