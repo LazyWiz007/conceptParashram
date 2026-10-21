@@ -6,13 +6,17 @@ import { TiersSection } from "@/components/sections/TiersSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { athlete, race } from "@/content/site";
 import { findAvatar } from "@/lib/photos";
+import { readSlots } from "@/lib/slotStore";
+
+// slots are editable in /admin, so this page cannot be baked at build time
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const avatar = await findAvatar();
+  const [avatar, slots] = await Promise.all([findAvatar(), readSlots()]);
 
   return (
     <main>
-      <Studio avatar={avatar} />
+      <Studio slots={slots} avatar={avatar} />
       <RaceSection />
       <ReachSection />
       <DocumentarySection />

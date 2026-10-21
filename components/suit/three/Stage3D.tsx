@@ -83,26 +83,18 @@ export function Stage3D({
           <SuitModel onReady={setSuit} />
         </group>
 
-        {slots.map((s) => {
-          const active = focusedId === s.id || hoveredId === s.id;
-          const dimmed = Boolean(focusedId) && focusedId !== s.id;
-          return (
-            <SlotDecal3D
-              key={s.id}
-              target={suit}
-              position={s.anchor.position}
-              rotation={s.anchor.rotation}
-              size={s.anchor.size}
-              tier={s.tier}
-              taken={s.status !== "open"}
-              active={active}
-              opacity={dimmed ? 0.25 : 1}
-              onPointerOver={onHover ? () => onHover(s.id) : undefined}
-              onPointerOut={onHover ? () => onHover(null) : undefined}
-              onClick={onSelect ? () => onSelect(s.id) : undefined}
-            />
-          );
-        })}
+        {slots.map((s) => (
+          <SlotDecal3D
+            key={s.id}
+            target={suit}
+            slot={s}
+            active={focusedId === s.id || hoveredId === s.id}
+            dimmed={Boolean(focusedId) && focusedId !== s.id}
+            onPointerOver={onHover ? () => onHover(s.id) : undefined}
+            onPointerOut={onHover ? () => onHover(null) : undefined}
+            onClick={onSelect ? () => onSelect(s.id) : undefined}
+          />
+        ))}
 
         <ContactShadows
           position={[0, -2.37, 0]}

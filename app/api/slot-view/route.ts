@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { SLOTS_BY_ID } from "@/content/slots";
 import { bumpSlotView } from "@/lib/db";
+import { readSlots } from "@/lib/slotStore";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +12,8 @@ export async function POST(req: Request) {
   } catch {
     return NextResponse.json({ error: "bad json" }, { status: 400 });
   }
-  if (typeof slotId !== "string" || !SLOTS_BY_ID.has(slotId)) {
+  const slots = await readSlots();
+  if (typeof slotId !== "string" || !slots.some((s) => s.id === slotId)) {
     return NextResponse.json({ error: "unknown slot" }, { status: 400 });
   }
   await bumpSlotView(slotId);

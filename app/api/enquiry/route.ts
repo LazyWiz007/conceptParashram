@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { Resend } from "resend";
-import { SLOTS_BY_ID } from "@/content/slots";
 import { athlete } from "@/content/site";
 import { inr } from "@/lib/format";
 import { saveEnquiry } from "@/lib/db";
+import { readSlots } from "@/lib/slotStore";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
   const d = parsed.data;
   if (d.company_url) return NextResponse.json({ ok: true }); // silently drop bots
 
-  const slot = SLOTS_BY_ID.get(d.slotId);
+  const slot = (await readSlots()).find((s) => s.id === d.slotId);
   if (!slot) return NextResponse.json({ error: "Unknown slot." }, { status: 400 });
   if (slot.status !== "open") {
     return NextResponse.json({ error: "That slot has already gone." }, { status: 409 });

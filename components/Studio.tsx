@@ -2,8 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
-import { SLOTS, SLOTS_BY_ID } from "@/content/slots";
 import { athlete, DRAFT, race } from "@/content/site";
+import type { Slot } from "@/lib/types";
 import { cameraForAnchor } from "@/lib/slotCamera";
 import { useSlotViews, useTrackSlotView } from "@/lib/useLive";
 import { HOME, type CameraMove } from "@/components/suit/three/CameraRig";
@@ -20,7 +20,7 @@ const Stage3D = dynamic(() => import("@/components/suit/three/Stage3D").then((m)
   ssr: false,
 });
 
-export function Studio({ avatar }: { avatar?: string | null }) {
+export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | null }) {
   const [focusedId, setFocusedId] = useState<string | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [listOpen, setListOpen] = useState(false);
@@ -29,11 +29,12 @@ export function Studio({ avatar }: { avatar?: string | null }) {
   const views = useSlotViews();
   useTrackSlotView(focusedId);
 
-  const focused = focusedId ? SLOTS_BY_ID.get(focusedId) ?? null : null;
-  const openCount = useMemo(() => SLOTS.filter((s) => s.status === "open").length, []);
+  const byId = useMemo(() => new Map(slots.map((s) => [s.id, s])), [slots]);
+  const focused = focusedId ? byId.get(focusedId) ?? null : null;
+  const openCount = useMemo(() => slots.filter((s) => s.status === "open").length, [slots]);
 
   function select(id: string) {
-    const slot = SLOTS_BY_ID.get(id);
+    const slot = byId.get(id);
     if (!slot) return;
     if (focusedId === id) return close();
     setFocusedId(id);
@@ -45,14 +46,14 @@ export function Studio({ avatar }: { avatar?: string | null }) {
     setMove(HOME);
   }
 
-  const hovered = hoveredId ? SLOTS_BY_ID.get(hoveredId) : null;
+  const hovered = hoveredId ? byId.get(hoveredId) : null;
 
   return (
     <section className="relative h-[100svh] w-full overflow-hidden">
       <div className="absolute inset-0">
         <CanvasBoundary>
           <Stage3D
-            slots={SLOTS}
+            slots={slots}
             move={move}
             focusedId={focusedId}
             hoveredId={hoveredId}
@@ -126,6 +127,7 @@ export function Studio({ avatar }: { avatar?: string | null }) {
       <SlotCard slot={focused} views={views[focusedId ?? ""]} onClose={close} />
 
       <SlotList
+        slots={slots}
         open={listOpen}
         views={views}
         onPick={(slot) => {

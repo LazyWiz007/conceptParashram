@@ -9,10 +9,14 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "ADMIN_PASSWORD is not set." }, { status: 500 });
   }
   const form = await req.formData();
+  // only ever bounce to our own paths, never an absolute URL from the form
+  const raw = String(form.get("next") ?? "/admin");
+  const next = raw.startsWith("/") && !raw.startsWith("//") ? raw : "/admin";
+
   if (String(form.get("password") ?? "") !== secret) {
-    return NextResponse.redirect(new URL("/admin?bad=1", req.url), { status: 303 });
+    return NextResponse.redirect(new URL(`${next}?bad=1`, req.url), { status: 303 });
   }
-  const res = NextResponse.redirect(new URL("/admin", req.url), { status: 303 });
+  const res = NextResponse.redirect(new URL(next, req.url), { status: 303 });
   res.cookies.set(ADMIN_COOKIE, issueToken(secret), {
     httpOnly: true,
     sameSite: "lax",

@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as THREE from "three";
 import { DecalGeometry } from "three-stdlib";
-import { SOLD_HEX, TIER_HEX } from "@/lib/tierColors";
-import type { TierId } from "@/lib/types";
+import { drawSlotArt, loadLogo } from "@/lib/slotTexture";
+import type { Slot } from "@/lib/types";
 
 /**
  * Projects a slot onto whatever geometry is underneath it. DecalGeometry clips
@@ -13,31 +13,23 @@ import type { TierId } from "@/lib/types";
  */
 export function SlotDecal3D({
   target,
-  position,
-  rotation,
-  size,
-  tier,
-  taken = false,
+  slot,
   active = false,
-  opacity = 1,
-  map,
+  dimmed = false,
   onPointerOver,
   onPointerOut,
   onClick,
 }: {
   target: THREE.Mesh | null;
-  position: [number, number, number];
-  rotation: [number, number, number];
-  size: [number, number, number];
-  tier: TierId;
-  taken?: boolean;
+  slot: Slot;
   active?: boolean;
-  opacity?: number;
-  map?: THREE.Texture;
+  dimmed?: boolean;
   onPointerOver?: () => void;
   onPointerOut?: () => void;
   onClick?: () => void;
 }) {
+  const { position, rotation, size } = slot.anchor;
+
   const geometry = useMemo(() => {
     if (!target) return null;
     try {
@@ -53,9 +45,21 @@ export function SlotDecal3D({
     }
   }, [target, position, rotation, size]);
 
-  if (!geometry) return null;
+  const [logo, setLogo] = useState<HTMLImageElement | null>(null);
+  useEffect(() => {
+    let alive = true;
+    loadLogo(slot.sponsor?.logo).then((img) => alive && setLogo(img));
+    return () => {
+      alive = false;
+    };
+  }, [slot.sponsor?.logo]);
 
-  const hex = taken ? SOLD_HEX : TIER_HEX[tier];
+  const art = useMemo(() => drawSlotArt(slot, logo, active), [slot, logo, active]);
+  useEffect(() => art.dispose, [art]);
+
+  useEffect(() => () => geometry?.dispose(), [geometry]);
+
+  if (!geometry) return null;
 
   return (
     <mesh
@@ -88,17 +92,17 @@ export function SlotDecal3D({
       }
     >
       <meshStandardMaterial
-        map={map}
-        color={hex}
-        emissive={hex}
-        emissiveIntensity={active ? 0.75 : 0.22}
+        map={art.texture}
         transparent
-        opacity={opacity}
+        opacity={dimmed ? 0.3 : 1}
+        emissive="#ffffff"
+        emissiveMap={art.texture}
+        emissiveIntensity={active ? 0.6 : 0.32}
         depthTest
         depthWrite={false}
         polygonOffset
         polygonOffsetFactor={-12}
-        roughness={0.65}
+        roughness={0.7}
         metalness={0}
         side={THREE.FrontSide}
       />

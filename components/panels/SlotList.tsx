@@ -1,23 +1,25 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { SLOTS, TIERS } from "@/content/slots";
+import { TIERS } from "@/content/slots";
 import { compact, inr } from "@/lib/format";
 import type { Slot } from "@/lib/types";
 
 export function SlotList({
+  slots,
   open,
   views,
   onPick,
   onClose,
 }: {
+  slots: Slot[];
   open: boolean;
   views: Record<string, number>;
   onPick: (slot: Slot) => void;
   onClose: () => void;
 }) {
   const order = TIERS.map((t) => t.id);
-  const sorted = [...SLOTS].sort(
+  const sorted = [...slots].sort(
     (a, b) => order.indexOf(a.tier) - order.indexOf(b.tier) || b.price - a.price,
   );
 
@@ -45,7 +47,7 @@ export function SlotList({
               <div>
                 <h2 className="text-base font-semibold">Every slot</h2>
                 <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-                  {SLOTS.filter((s) => s.status === "open").length} of {SLOTS.length} still open
+                  {slots.filter((s) => s.status === "open").length} of {slots.length} still open
                 </p>
               </div>
               <button

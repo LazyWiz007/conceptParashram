@@ -29,6 +29,13 @@ create table if not exists enquiries (
 );
 create index if not exists enquiries_created_at_idx on enquiries (created_at desc);
 
+-- The editable slot list, plus anything else the admin edits.
+create table if not exists site_state (
+  key        text primary key,
+  value      jsonb not null,
+  updated_at timestamptz not null default now()
+);
+
 -- Atomic increment so concurrent viewers cannot clobber each other.
 create or replace function increment_slot_view(p_slot_id text)
 returns void
@@ -42,3 +49,4 @@ $$;
 alter table slot_views     enable row level security;
 alter table visitor_events enable row level security;
 alter table enquiries      enable row level security;
+alter table site_state     enable row level security;

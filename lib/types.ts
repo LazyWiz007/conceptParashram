@@ -4,9 +4,15 @@ export type SlotStatus = "open" | "pending" | "sold";
 
 export type Sponsor = {
   name: string;
-  /** Path under /public, or null while we only have a wordmark. */
+  /** Path under /public or an uploaded URL; null falls back to a wordmark. */
   logo: string | null;
   url?: string;
+  /** Handle shown under the name in the slot card. */
+  handle?: string;
+  /** One line describing what they do. */
+  tagline?: string;
+  /** Brand colour the print is filled with. */
+  color?: string;
 };
 
 /**

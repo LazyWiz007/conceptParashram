@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { TIERS_BY_ID } from "@/content/slots";
@@ -28,15 +29,33 @@ export function SlotCard({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
           transition={{ type: "spring", stiffness: 260, damping: 28 }}
-          className="pointer-events-auto absolute inset-x-3 bottom-3 z-30 max-h-[76svh] overflow-y-auto rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-4 backdrop-blur-xl scroll-slim sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-1/2 sm:w-[23rem] sm:-translate-y-1/2 sm:p-5"
+          className="pointer-events-auto absolute inset-x-3 bottom-3 z-30 max-h-[78svh] overflow-y-auto rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-4 backdrop-blur-xl scroll-slim sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-1/2 sm:w-[24rem] sm:-translate-y-1/2 sm:p-6"
           aria-label={`${slot.label} details`}
         >
-          <Header slot={slot} views={views} onClose={onClose} />
+          <header className="mb-5 flex items-start justify-between gap-3">
+            <h2 className="text-[15px] font-semibold leading-snug">
+              {slot.label}
+              {views ? (
+                <span className="ml-2 font-normal text-[var(--ink-faint)]">
+                  ({compact(views)} views)
+                </span>
+              ) : null}
+            </h2>
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="-mr-1 -mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(56_189_248/0.12)] hover:text-[var(--ink)]"
+            >
+              ✕
+            </button>
+          </header>
 
-          {enquiring ? (
+          {slot.status !== "open" ? (
+            <Taken slot={slot} />
+          ) : enquiring ? (
             <EnquiryForm slot={slot} onDone={() => setEnquiring(false)} />
           ) : (
-            <Detail slot={slot} onClaim={() => setEnquiring(true)} />
+            <Available slot={slot} onClaim={() => setEnquiring(true)} />
           )}
         </motion.aside>
       )}
@@ -44,10 +63,75 @@ export function SlotCard({
   );
 }
 
-function Header({ slot, views, onClose }: { slot: Slot; views?: number; onClose: () => void }) {
-  const tier = TIERS_BY_ID.get(slot.tier)!;
+/** Sold slots lead with the sponsor, the way the reference site does. */
+function Taken({ slot }: { slot: Slot }) {
+  const s = slot.sponsor;
+  const brand = s?.color ?? "var(--sold)";
+
   return (
-    <div className="mb-3 flex items-start justify-between gap-3">
+    <div className="text-center">
+      <div
+        className="mx-auto grid h-28 w-28 place-items-center overflow-hidden rounded-[1.4rem]"
+        style={{ background: brand }}
+      >
+        {s?.logo ? (
+          <Image
+            src={s.logo}
+            alt={s.name}
+            width={112}
+            height={112}
+            className="h-full w-full object-contain p-3"
+            unoptimized
+          />
+        ) : (
+          <span className="px-2 text-lg font-bold text-[#06121b]">{s?.name}</span>
+        )}
+      </div>
+
+      <h3 className="mt-4 text-2xl font-semibold tracking-tight">{s?.name}</h3>
+
+      {s?.handle && (
+        <p className="mt-1.5 flex items-center justify-center gap-1.5 text-sm text-[var(--ink-dim)]">
+          by
+          <span
+            className="grid h-5 w-5 place-items-center overflow-hidden rounded-full"
+            style={{ background: brand }}
+            aria-hidden
+          >
+            {s.logo && (
+              <Image src={s.logo} alt="" width={20} height={20} className="object-contain p-0.5" unoptimized />
+            )}
+          </span>
+          {s.handle}
+        </p>
+      )}
+
+      {s?.tagline && <p className="mt-2 text-sm text-[var(--ink-dim)]">{s.tagline}</p>}
+
+      {s?.url && (
+        <a
+          href={s.url}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-3 inline-block text-sm text-[var(--tier-prime)] underline-offset-4 hover:underline"
+        >
+          {s.url.replace(/^https?:\/\//, "").replace(/\/$/, "")} ↗
+        </a>
+      )}
+
+      <div className="mt-6 rounded-xl border border-[var(--line)] bg-[rgb(56_189_248/0.05)] px-4 py-5">
+        <p className="text-sm text-[var(--ink-dim)]">Sponsored for</p>
+        <p className="mt-1 text-3xl font-semibold tracking-tight">{inr(slot.price)}</p>
+      </div>
+    </div>
+  );
+}
+
+function Available({ slot, onClaim }: { slot: Slot; onClaim: () => void }) {
+  const tier = TIERS_BY_ID.get(slot.tier)!;
+
+  return (
+    <div className="space-y-4">
       <div>
         <span
           className="font-mono text-[10px] uppercase tracking-[0.18em]"
@@ -55,29 +139,9 @@ function Header({ slot, views, onClose }: { slot: Slot; views?: number; onClose:
         >
           {tier.name}
         </span>
-        <h2 className="mt-0.5 text-lg font-semibold leading-tight">{slot.label}</h2>
-        <p className="mt-0.5 font-mono text-[11px] text-[var(--ink-faint)]">
-          {slot.size}
-          {views ? ` · ${compact(views)} views` : ""}
-        </p>
+        <p className="mt-0.5 font-mono text-[11px] text-[var(--ink-faint)]">{slot.size}</p>
       </div>
-      <button
-        onClick={onClose}
-        aria-label="Close"
-        className="-mr-1 -mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(56_189_248/0.12)] hover:text-[var(--ink)]"
-      >
-        ✕
-      </button>
-    </div>
-  );
-}
 
-function Detail({ slot, onClaim }: { slot: Slot; onClaim: () => void }) {
-  const tier = TIERS_BY_ID.get(slot.tier)!;
-  const taken = slot.status !== "open";
-
-  return (
-    <div className="space-y-4">
       <p className="text-sm leading-relaxed text-[var(--ink-dim)]">{slot.pitch}</p>
 
       <div>
@@ -94,24 +158,17 @@ function Detail({ slot, onClaim }: { slot: Slot; onClaim: () => void }) {
         </ul>
       </div>
 
-      <div className="flex items-end justify-between border-t border-[var(--line)] pt-3">
-        <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
-            {taken ? "Taken by" : "Price"}
-          </p>
-          <p className="text-xl font-semibold">
-            {taken ? slot.sponsor?.name ?? "Sold" : inr(slot.price)}
-          </p>
-        </div>
+      <div className="rounded-xl border border-[var(--line)] bg-[rgb(56_189_248/0.05)] px-4 py-4">
+        <p className="text-sm text-[var(--ink-dim)]">Price</p>
+        <p className="mt-0.5 text-3xl font-semibold tracking-tight">{inr(slot.price)}</p>
       </div>
 
       <button
         onClick={onClaim}
-        disabled={taken}
-        className="w-full rounded-lg px-4 py-3 text-sm font-semibold text-[#03131c] transition disabled:cursor-not-allowed disabled:bg-[var(--sold)] disabled:text-[var(--void)]"
-        style={taken ? undefined : { background: `var(--tier-${slot.tier})` }}
+        className="w-full rounded-lg px-4 py-3 text-sm font-semibold text-[#03131c] transition"
+        style={{ background: `var(--tier-${slot.tier})` }}
       >
-        {taken ? "Already taken" : "Claim this slot"}
+        Claim this slot
       </button>
     </div>
   );

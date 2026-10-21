@@ -16,11 +16,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
   title: "Sponsor my trisuit",
   description:
-    "Fourteen places on the suit I will race an Ironman in. Pick one, put your logo on it, and come with me for the whole thing — including all seven documentary episodes.",
+    "Pick a place on the suit I will race an Ironman in, put your logo on it, and come with me for the whole thing — including all seven documentary episodes.",
   openGraph: {
     title: "Sponsor my trisuit",
     description:
-      "Fourteen places on the suit I will race an Ironman in — plus a seven-part documentary your brand is part of.",
+      "Put your logo on the suit I will race an Ironman in — plus a seven-part documentary your brand is part of.",
     type: "website",
     images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "A blank trisuit with fourteen sponsor slots marked on it" }],
   },

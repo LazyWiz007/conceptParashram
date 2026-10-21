@@ -43,3 +43,7 @@ next-env.d.ts
 
 # the trisuit model is committed: meshopt + WebP brings it to ~1.1 MB.
 # Re-run scripts/optimize-model.sh after any re-export.
+
+# Slot edits made in /admin when Supabase is not configured.
+data/
+public/media/logos/
