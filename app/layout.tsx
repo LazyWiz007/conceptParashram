@@ -15,8 +15,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+/**
+ * Absolute base for OG tags. Falls back to the URL Vercel injects at build
+ * time, so a shared link shows its preview card even if NEXT_PUBLIC_SITE_URL
+ * was never set — without it the card pointed at localhost and showed nothing.
+ */
+function siteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  const vercel =
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL;
+  if (vercel) return `https://${vercel}`;
+  return "http://localhost:3000";
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(siteUrl()),
   title: "Sponsor my trisuit",
   description:
     "Pick a place on the suit I will race an Ironman in, put your logo on it, and come with me for the whole thing — including all seven documentary episodes.",
