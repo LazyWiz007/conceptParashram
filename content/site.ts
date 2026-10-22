@@ -20,9 +20,9 @@ export const athlete = {
   phone: "+91 00000 00000", // TODO
   entity: "TODO Pvt Ltd", // TODO: who invoices sponsors
   /** Looping ambient clip behind the suit. */
-  video: "/media/swim.mp4",
-  videoPoster: "/media/swim-poster.jpg",
-  videoCaption: "I'll make it work. I'm insane.",
+  video: "/media/finish.mp4",
+  videoPoster: "/media/finish-poster.jpg",
+  videoCaption: "Finish line, 5i50.",
 };
 
 export const race = {

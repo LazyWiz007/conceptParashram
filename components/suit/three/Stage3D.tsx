@@ -101,10 +101,10 @@ export function Stage3D({
         {video && (
           <VideoPanel
             src={video}
-            position={[0, 0.9, 9.6]}
+            position={[0, 1.1, 9.6]}
             rotation={[0, Math.PI, 0]}
-            width={4.6}
-            height={5.96}
+            width={6.63}
+            height={3.72}
           />
         )}
 

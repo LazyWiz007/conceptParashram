@@ -52,10 +52,10 @@ function Screen({ src, width, height }: { src: string; width: number; height: nu
  */
 export function VideoPanel({
   src,
-  position = [0, 0.35, -2.6],
+  position = [0, 0.55, -2.7],
   rotation = [0, 0, 0],
-  width = 2.7,
-  height = 3.5,
+  width = 3.9,
+  height = 2.19,
 }: {
   src: string;
   position?: [number, number, number];
