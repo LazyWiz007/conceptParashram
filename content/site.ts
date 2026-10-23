@@ -37,9 +37,10 @@ export const race = {
   dateConfirmed: true,
   goal: "Finish under 5 hours 30.", // TODO: confirm your actual target
   story: [
-    "I run a company and I race. Most people pick one.",
-    "A 70.3 is a 1.9 km swim, a 90 km ride and a half marathon, back to back, in one morning. I have raced Hyrox, the 5i50, the Heritage Run and a string of road and MTB events to get here. Training sits either side of a working day — roughly 18 hours a week, most of it before sunrise, all of it paid for out of my own pocket.",
-    "This page covers the rest: the entry, the travel, the bike, the coaching, and a seven-part film crew following the whole thing.",
+    "I build a company. The racing is what makes me better at it.",
+    "Most people treat the two as a trade-off. I found the opposite — the early mornings, the structure and the discomfort feed straight back into the work. I think more clearly on the days I train than on the days I do not.",
+    "I have raced the BBCh cycling series, triathlons and marathons to get here. A 70.3 is a 1.9 km swim, a 90 km ride and a half marathon, back to back, in one morning. Training sits either side of a working day, most of it before sunrise, all of it paid for out of my own pocket.",
+    "The part I love most is documenting it. I have filmed other people's endurance stories for years — this time the camera is pointed at my own, as a seven-part series running from here to the finish line in Goa. Be part of the journey.",
   ],
 };
 
@@ -67,6 +68,7 @@ export const aboutPhotos = [
  */
 export const track = [
   "IRONMAN 70.3",
+  "BBCh",
   "Ironman 5i50",
   "Hyrox",
   "Heritage Run",
