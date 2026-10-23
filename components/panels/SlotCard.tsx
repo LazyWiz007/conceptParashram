@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { TIERS_BY_ID } from "@/content/slots";
 import { compact, inr } from "@/lib/format";
 import type { Slot } from "@/lib/types";
-import { EnquiryForm } from "./EnquiryForm";
+import { ClaimOptions } from "./ClaimOptions";
 
 export function SlotCard({
   slot,
@@ -38,7 +38,7 @@ export function SlotCard({
           transition={{ type: "spring", stiffness: 260, damping: 28 }}
           // the claim form gets a wider, taller card so it is not a squeeze to fill in
           className={`pointer-events-auto absolute inset-x-3 bottom-3 z-30 overflow-y-auto rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-4 backdrop-blur-xl scroll-slim transition-[width] sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-1/2 sm:-translate-y-1/2 sm:p-6 ${
-            enquiring ? "max-h-[90svh] sm:w-[34rem] sm:p-8" : "max-h-[78svh] sm:w-[24rem]"
+            enquiring ? "max-h-[90svh] sm:w-[26rem] sm:p-7" : "max-h-[78svh] sm:w-[24rem]"
           }`}
           aria-label={`${slot.label} details`}
         >
@@ -63,7 +63,7 @@ export function SlotCard({
           {slot.status !== "open" ? (
             <Taken slot={slot} />
           ) : enquiring ? (
-            <EnquiryForm slot={slot} onDone={() => setEnquiring(false)} />
+            <ClaimOptions slot={slot} onBack={() => setEnquiring(false)} />
           ) : (
             <Available
               slot={slot}
@@ -253,10 +253,10 @@ function Available({
       <div className="flex flex-col gap-2">
         <button
           onClick={onClaim}
-          className="w-full rounded-lg px-4 py-3 text-sm font-semibold text-[#0a0a0b] transition"
+          className="w-full rounded-xl px-4 py-4 text-base font-semibold text-[#0a0a0b] transition hover:brightness-110"
           style={{ background: `var(--tier-${slot.tier})` }}
         >
-          Claim this slot
+          Claim your spot and add your logo
         </button>
         {!preview && (
           <button
