@@ -218,7 +218,13 @@ export const SLOTS: Slot[] = [
     label: "Right side panel",
     tier: "support",
     price: 10000,
-    status: "open",
+    status: "sold",
+    sponsor: {
+      name: "Webrook",
+      logo: "/sponsors/webrook.png",
+      url: "https://webrook.in",
+      logoTurn: 90,
+    },
     size: "8 × 22 cm",
     pitch:
       "Mirror of the left side panel. The drive side, which is where press photographers shoot from.",
