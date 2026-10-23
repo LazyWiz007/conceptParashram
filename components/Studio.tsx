@@ -2,7 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
-import { athlete, DRAFT, race } from "@/content/site";
+import Image from "next/image";
+import { athlete, race } from "@/content/site";
 import type { Slot } from "@/lib/types";
 import { cameraForAnchor } from "@/lib/slotCamera";
 import { useSlotViews, useTrackSlotView } from "@/lib/useLive";
@@ -114,18 +115,29 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
           focusedId ? "opacity-0" : "opacity-100"
         }`}
       >
-        {DRAFT && (
-          <span className="pointer-events-auto mb-2 inline-block rounded-full border border-[rgb(255_212_0/0.4)] bg-[rgb(255_212_0/0.1)] px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.16em] text-[var(--accent)]">
-            Draft content
-          </span>
-        )}
-        <h1 className="text-balance text-2xl font-semibold leading-[1.1] tracking-tight sm:text-[2rem]">
+        {/*
+          Nearly half the official logo is dark navy, so it disappears against
+          the chamber. It sits on a light chip to stay legible — which is also
+          how a race mark is normally presented.
+        */}
+        <span className="pointer-events-auto mb-3 inline-flex rounded-lg bg-white px-3 py-2 shadow-[0_2px_18px_rgb(0_0_0/0.45)]">
+          <Image
+            src={race.logo}
+            alt={race.name}
+            width={359}
+            height={248}
+            className="h-10 w-auto sm:h-12"
+            priority
+          />
+        </span>
+
+        <h1 className="text-balance text-2xl font-bold leading-[1.1] tracking-tight sm:text-[2rem]">
           Sponsor my trisuit
         </h1>
-        <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--accent)]">
+        <p className="mt-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           {athlete.name} · {athlete.title}
         </p>
-        <p className="mt-2 max-w-[30ch] text-sm leading-relaxed text-[var(--ink-dim)] [@media(max-height:620px)]:hidden">
+        <p className="mt-2 max-w-[32ch] text-sm font-medium leading-relaxed text-[var(--ink)] [@media(max-height:620px)]:hidden">
           {openCount} places on the suit I will race {race.name} in. Spin it, pick one, put your
           logo on it.
         </p>

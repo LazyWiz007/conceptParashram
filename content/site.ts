@@ -5,7 +5,7 @@
  * small "draft content" chip so nobody mistakes these numbers for real ones.
  * ─────────────────────────────────────────────────────────────────────────────
  */
-export const DRAFT = true;
+export const DRAFT = false;
 
 export const athlete = {
   name: "Parashram Gore",
@@ -27,6 +27,8 @@ export const athlete = {
 
 export const race = {
   name: "IRONMAN 70.3 Goa",
+  /** Official event logo. Mostly dark navy, so it needs a light backing. */
+  logo: "/media/ironman-70-3-goa.webp",
   short: "70.3 Goa",
   distance: "1.9 km swim · 90 km bike · 21.1 km run",
   location: "Goa, India",
