@@ -9,7 +9,8 @@ export const TIERS: Tier[] = [
   {
     id: "title",
     name: "Title",
-    blurb: "The two surfaces that carry the race. Centre chest owns every finish-line photo; the upper back is what the field stares at for eleven hours.",
+    blurb:
+      "The two surfaces that carry the race. Centre chest owns every finish-line photo; the upper back is what everyone racing behind reads for the whole morning.",
     accent: "var(--tier-title)",
     deliverables: [
       "Largest print on the suit",
@@ -34,7 +35,8 @@ export const TIERS: Tier[] = [
   {
     id: "core",
     name: "Core",
-    blurb: "Sleeves, core and lower back. Smaller, constantly in motion, constantly in frame.",
+    blurb:
+      "Lower back and sleeves. Smaller, constantly in motion, and the placements that survive the aero tuck when the chest is hidden.",
     accent: "var(--tier-core)",
     deliverables: [
       "Mid-size print",
@@ -46,7 +48,8 @@ export const TIERS: Tier[] = [
   {
     id: "support",
     name: "Support",
-    blurb: "The entry point. Real estate on a real Ironman suit, at a price a small brand can say yes to.",
+    blurb:
+      "Shoulders and rib panels. The entry point — real estate on a real 70.3 suit, at a price a small brand can say yes to.",
     accent: "var(--tier-support)",
     deliverables: [
       "Compact print",
@@ -59,9 +62,9 @@ export const TIERS: Tier[] = [
 
 export const TIER_PRICE: Record<Tier["id"], number> = {
   title: 300000,
-  prime: 150000,
+  prime: 110000,
   core: 75000,
-  support: 40000,
+  support: 45000,
 };
 
 export const SLOTS: Slot[] = [
@@ -69,7 +72,7 @@ export const SLOTS: Slot[] = [
     id: "chest_centre",
     label: "Centre chest",
     tier: "title",
-    price: 300000,
+    price: 350000,
     status: "open",
     size: "22 × 9 cm",
     pitch:
@@ -84,7 +87,7 @@ export const SLOTS: Slot[] = [
     id: "chest_band",
     label: "Chest band",
     tier: "prime",
-    price: 150000,
+    price: 200000,
     status: "open",
     size: "26 × 8 cm",
     pitch:
@@ -129,7 +132,7 @@ export const SLOTS: Slot[] = [
     id: "thigh_left",
     label: "Left thigh",
     tier: "prime",
-    price: 150000,
+    price: 110000,
     status: "open",
     size: "13 × 9 cm",
     pitch:
@@ -144,7 +147,7 @@ export const SLOTS: Slot[] = [
     id: "thigh_right",
     label: "Right thigh",
     tier: "prime",
-    price: 150000,
+    price: 110000,
     status: "open",
     size: "13 × 9 cm",
     pitch:
@@ -174,7 +177,7 @@ export const SLOTS: Slot[] = [
     id: "back_lower",
     label: "Lower back",
     tier: "core",
-    price: 75000,
+    price: 90000,
     status: "open",
     size: "16 × 8 cm",
     pitch:
@@ -189,7 +192,7 @@ export const SLOTS: Slot[] = [
     id: "shoulder_left",
     label: "Left shoulder",
     tier: "support",
-    price: 40000,
+    price: 50000,
     status: "open",
     size: "9 × 5 cm",
     pitch:
@@ -204,7 +207,7 @@ export const SLOTS: Slot[] = [
     id: "shoulder_right",
     label: "Right shoulder",
     tier: "support",
-    price: 40000,
+    price: 50000,
     status: "open",
     size: "9 × 5 cm",
     pitch: "Mirror of the left shoulder. Sold as a pair if you want both.",
@@ -217,12 +220,12 @@ export const SLOTS: Slot[] = [
   {
     id: "side_left",
     label: "Left side panel",
-    tier: "core",
-    price: 75000,
+    tier: "support",
+    price: 45000,
     status: "open",
     size: "8 × 22 cm",
     pitch:
-      "Down the ribs. A tall vertical panel that is readable from the side for the whole bike leg, which is five of the eleven hours.",
+      "Down the ribs. A tall vertical panel, readable from the side for the whole 90 km bike leg — the longest single stretch of the race.",
     anchor: {
       position: [0.426, 0.402, 0.166],
       rotation: [0.435, 1.04, -0.381],
@@ -232,8 +235,8 @@ export const SLOTS: Slot[] = [
   {
     id: "side_right",
     label: "Right side panel",
-    tier: "core",
-    price: 75000,
+    tier: "support",
+    price: 45000,
     status: "open",
     size: "8 × 22 cm",
     pitch:
