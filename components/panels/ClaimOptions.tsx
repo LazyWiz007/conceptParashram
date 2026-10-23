@@ -52,7 +52,12 @@ export function ClaimOptions({ slot, onBack }: { slot: Slot; onBack: () => void 
 
       </div>
 
-      <div className="flex items-center gap-3">
+      {/*
+        The form is desktop only. On a phone it filled the card and pushed the
+        suit off screen entirely; Instagram and email both reach Parashram just
+        as well and cost a visitor one tap.
+      */}
+      <div className="hidden items-center gap-3 sm:flex">
         <span className="h-px flex-1 bg-[var(--line)]" />
         <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
           or leave your details
@@ -60,7 +65,9 @@ export function ClaimOptions({ slot, onBack }: { slot: Slot; onBack: () => void 
         <span className="h-px flex-1 bg-[var(--line)]" />
       </div>
 
-      <EnquiryForm slot={slot} />
+      <div className="hidden sm:block">
+        <EnquiryForm slot={slot} />
+      </div>
 
       {/* spelled out so it can be copied by anyone whose mail client will not open */}
       <div className="rounded-lg border border-[var(--line)] bg-[rgb(255_255_255/0.03)] px-4 py-3 text-center">

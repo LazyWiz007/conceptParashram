@@ -38,7 +38,9 @@ export function SlotCard({
           transition={{ type: "spring", stiffness: 260, damping: 28 }}
           // the claim form gets a wider, taller card so it is not a squeeze to fill in
           className={`pointer-events-auto absolute inset-x-3 bottom-3 z-30 overflow-y-auto rounded-2xl border border-[var(--line)] bg-[var(--panel)] p-4 backdrop-blur-xl scroll-slim transition-[width] sm:inset-x-auto sm:bottom-auto sm:right-5 sm:top-1/2 sm:-translate-y-1/2 sm:p-6 ${
-            enquiring ? "max-h-[90svh] sm:w-[26rem] sm:p-7" : "max-h-[78svh] sm:w-[24rem]"
+            enquiring
+              ? "max-h-[62svh] sm:max-h-[90svh] sm:w-[26rem] sm:p-7"
+              : "max-h-[62svh] sm:max-h-[78svh] sm:w-[24rem]"
           }`}
           aria-label={`${slot.label} details`}
         >
@@ -143,6 +145,19 @@ function Taken({ slot }: { slot: Slot }) {
   );
 }
 
+function Deliverables({ slot, tier }: { slot: Slot; tier: { deliverables: readonly string[] } }) {
+  return (
+    <ul className="mt-2 space-y-1 sm:mt-0">
+      {tier.deliverables.map((d) => (
+        <li key={d} className="flex gap-2 text-sm text-[var(--ink-dim)]">
+          <span style={{ color: `var(--tier-${slot.tier})` }}>—</span>
+          <span>{d}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 const LOGO_TYPES = "image/png,image/jpeg,image/webp,image/svg+xml";
 const LOGO_MAX = 5 * 1024 * 1024;
 
@@ -185,20 +200,29 @@ function Available({
         <p className="mt-0.5 font-mono text-[11px] text-[var(--ink-faint)]">{slot.size}</p>
       </div>
 
-      <p className="text-sm leading-relaxed text-[var(--ink-dim)]">{slot.pitch}</p>
+      {/* the pitch reads well on a desktop card and swamps a phone one */}
+      <p className="hidden text-sm leading-relaxed text-[var(--ink-dim)] sm:block">{slot.pitch}</p>
 
-      <div>
+      {/*
+        Four deliverables plus the pitch pushed the price and the buttons below
+        the fold on a phone, so here the list is folded away behind a tap. The
+        desktop card has the room and shows it outright.
+      */}
+      <details className="group rounded-lg border border-[var(--line)] px-3 py-2.5 sm:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
+          What you get
+          <span className="transition-transform group-open:rotate-180" aria-hidden>
+            ⌄
+          </span>
+        </summary>
+        <Deliverables slot={slot} tier={tier} />
+      </details>
+
+      <div className="hidden sm:block">
         <p className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)]">
           What you get
         </p>
-        <ul className="space-y-1">
-          {tier.deliverables.map((d) => (
-            <li key={d} className="flex gap-2 text-sm text-[var(--ink-dim)]">
-              <span style={{ color: `var(--tier-${slot.tier})` }}>—</span>
-              <span>{d}</span>
-            </li>
-          ))}
-        </ul>
+        <Deliverables slot={slot} tier={tier} />
       </div>
 
       <div className="rounded-xl border border-[var(--line)] bg-[rgb(255_255_255/0.05)] px-4 py-4">
