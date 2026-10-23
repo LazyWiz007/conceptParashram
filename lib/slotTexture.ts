@@ -56,7 +56,12 @@ export function drawSlotArt(
   // That is how a visitor's uploaded preview is drawn.
   if (slot.status !== "open" && logo && !slot.sponsor?.color) {
     const margin = Math.round(Math.min(cw, ch) * 0.04);
-    drawContained(ctx, logo, { x: margin, y: margin, w: cw - margin * 2, h: ch - margin * 2 });
+    drawContained(
+      ctx,
+      logo,
+      { x: margin, y: margin, w: cw - margin * 2, h: ch - margin * 2 },
+      slot.sponsor?.logoTurn ?? 0,
+    );
     return finish(canvas);
   }
 
@@ -86,7 +91,12 @@ export function drawSlotArt(
 
   if (taken && logo) {
     // contain the logo inside the print with a comfortable margin
-    drawContained(ctx, logo, { x: pad * 2.2, y: pad * 2.2, w: cw - pad * 4.4, h: ch - pad * 4.4 });
+    drawContained(
+      ctx,
+      logo,
+      { x: pad * 2.2, y: pad * 2.2, w: cw - pad * 4.4, h: ch - pad * 4.4 },
+      slot.sponsor?.logoTurn ?? 0,
+    );
   } else if (taken) {
     label(ctx, cw, ch, slot.sponsor?.name ?? "Sponsored", "#0a0a0a");
   } else {
@@ -103,19 +113,37 @@ function finish(canvas: HTMLCanvasElement): SlotArt {
   return { texture, dispose: () => texture.dispose() };
 }
 
-/** Draws an image as large as fits inside `box`, centred, never stretched. */
+/**
+ * Draws an image as large as fits inside `box`, centred, never stretched.
+ * `turn` rotates it clockwise about the box centre first; a quarter turn swaps
+ * which side of the box constrains the fit, so the logo fills the long axis.
+ */
 function drawContained(
   ctx: CanvasRenderingContext2D,
   img: HTMLImageElement,
   box: { x: number; y: number; w: number; h: number },
+  turn = 0,
 ) {
   // an SVG with no width/height attributes loads at 0×0; give it a shape
   const iw = img.naturalWidth || img.width || 300;
   const ih = img.naturalHeight || img.height || 150;
-  const scale = Math.min(box.w / iw, box.h / ih);
-  const lw = iw * scale;
-  const lh = ih * scale;
-  ctx.drawImage(img, box.x + (box.w - lw) / 2, box.y + (box.h - lh) / 2, lw, lh);
+
+  if (!turn) {
+    const scale = Math.min(box.w / iw, box.h / ih);
+    ctx.drawImage(img, box.x + (box.w - iw * scale) / 2, box.y + (box.h - ih * scale) / 2, iw * scale, ih * scale);
+    return;
+  }
+
+  const quarter = Math.abs(turn % 180) === 90;
+  const bw = quarter ? box.h : box.w;
+  const bh = quarter ? box.w : box.h;
+  const scale = Math.min(bw / iw, bh / ih);
+
+  ctx.save();
+  ctx.translate(box.x + box.w / 2, box.y + box.h / 2);
+  ctx.rotate((turn * Math.PI) / 180);
+  ctx.drawImage(img, (-iw * scale) / 2, (-ih * scale) / 2, iw * scale, ih * scale);
+  ctx.restore();
 }
 
 function label(

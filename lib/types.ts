@@ -13,6 +13,11 @@ export type Sponsor = {
   tagline?: string;
   /** Brand colour the print is filled with. */
   color?: string;
+  /**
+   * Degrees to turn the logo within the print, clockwise. A tall, narrow slot
+   * such as a rib panel takes a wide wordmark far better on its side.
+   */
+  logoTurn?: number;
 };
 
 /**

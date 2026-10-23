@@ -193,7 +193,17 @@ export const SLOTS: Slot[] = [
     label: "Left side panel",
     tier: "support",
     price: 10000,
-    status: "open",
+    status: "sold",
+    sponsor: {
+      name: "Webrook",
+      logo: "/sponsors/webrook.png",
+      url: "https://webrook.in",
+      // No brand colour: the wordmark is printed straight onto the fabric,
+      // keeping its transparency, rather than sitting on a coloured patch.
+      // Turned a quarter so it reads down the ribs, which is the only way a
+      // wide wordmark fits a panel this narrow.
+      logoTurn: 90,
+    },
     size: "8 × 22 cm",
     pitch:
       "Down the ribs. A tall vertical panel, readable from the side for the whole 90 km bike leg — the longest single stretch of the race.",
