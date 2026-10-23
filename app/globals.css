@@ -15,6 +15,10 @@
   --line-strong: rgb(255 255 255 / 0.38);
   --panel: rgb(14 14 16 / 0.86);
   --accent: #ffd400;
+  /* The call to action gets its own red so it reads against a gold room —
+     the accent is used everywhere else and would blend straight in. */
+  --cta: #ff3b30;
+  --cta-ink: #ffffff;
 
   /* Tiers were four shades of the same yellow, so a sponsor could not tell
      them apart on the suit or in the list. Gold stays the lead; the rest take

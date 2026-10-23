@@ -208,7 +208,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         </span>
         <button
           onClick={() => setListOpen(true)}
-          className="whitespace-nowrap rounded-full border-4 border-[#0a0a0a] bg-[var(--accent)] px-8 py-3.5 text-[15px] font-semibold text-[#111] shadow-[0_0_34px_rgb(255_212_0/0.32)] transition hover:brightness-110 active:scale-[0.98]"
+          className="whitespace-nowrap rounded-full border-4 border-[#0a0a0a] bg-[var(--cta)] px-8 py-3.5 text-[15px] font-bold text-[var(--cta-ink)] shadow-[0_0_34px_rgb(255_59_48/0.45)] transition hover:brightness-110 active:scale-[0.98]"
         >
           Get Your Logo
         </button>
