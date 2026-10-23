@@ -27,6 +27,19 @@ export function SlotCard({
   const [enquiring, setEnquiring] = useState(false);
   useEffect(() => setEnquiring(false), [slot?.id]);
 
+  /**
+   * Peeking: the card folds down to its title bar so the suit behind it is
+   * visible. A phone concern only — the desktop card sits to one side and
+   * never covers the suit — so the body is hidden with a `sm:` class rather
+   * than unmounted, and the toggle itself is hidden from sm up.
+   */
+  const [peek, setPeek] = useState(false);
+  useEffect(() => setPeek(false), [slot?.id]);
+
+  // Trying a logo on is the whole reason to look at the suit, so picking one
+  // folds the card away without being asked. Clearing the preview brings it back.
+  useEffect(() => setPeek(Boolean(preview)), [preview]);
+
   return (
     <AnimatePresence>
       {slot && (
@@ -41,10 +54,13 @@ export function SlotCard({
             enquiring
               ? "max-h-[62svh] sm:max-h-[90svh] sm:w-[26rem] sm:p-7"
               : "max-h-[62svh] sm:max-h-[78svh] sm:w-[24rem]"
+          } ${
+            // folded: no scroll area and a tighter box, so it reads as a bar
+            peek ? "overflow-visible py-3 sm:py-6" : ""
           }`}
           aria-label={`${slot.label} details`}
         >
-          <header className="mb-5 flex items-start justify-between gap-3">
+          <header className={`flex items-start justify-between gap-3 ${peek ? "mb-0 sm:mb-5" : "mb-5"}`}>
             <h2 className="text-[15px] font-semibold leading-snug">
               {slot.label}
               {views ? (
@@ -53,6 +69,25 @@ export function SlotCard({
                 </span>
               ) : null}
             </h2>
+            <div className="flex shrink-0 items-center gap-1">
+            <button
+              onClick={() => setPeek((v) => !v)}
+              aria-label={peek ? "Show slot details" : "Hide the panel and look at the suit"}
+              aria-expanded={!peek}
+              className="-mt-1 grid h-8 w-8 place-items-center rounded-full text-[var(--ink-dim)] transition hover:bg-[rgb(255_255_255/0.12)] hover:text-[var(--ink)] sm:hidden"
+            >
+              {peek ? (
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" aria-hidden>
+                  <path d="M3 3l18 18M10.6 10.6a3 3 0 004.2 4.2" />
+                  <path d="M7 7.3C4.2 8.9 2 12 2 12s3.6 7 10 7c1.9 0 3.5-.6 4.9-1.4M19.5 15.6C21 14.1 22 12 22 12s-3.6-7-10-7c-.9 0-1.7.1-2.4.3" />
+                </svg>
+              )}
+            </button>
             <button
               onClick={onClose}
               aria-label="Close"
@@ -60,8 +95,10 @@ export function SlotCard({
             >
               ✕
             </button>
+            </div>
           </header>
 
+          <div className={peek ? "hidden sm:block" : undefined}>
           {slot.status !== "open" ? (
             <Taken slot={slot} />
           ) : enquiring ? (
@@ -74,6 +111,14 @@ export function SlotCard({
               onPreview={onPreview}
               onStopPreview={onStopPreview}
             />
+          )}
+          </div>
+
+          {/* while folded, say how to get the card back */}
+          {peek && (
+            <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--ink-faint)] sm:hidden">
+              {preview ? "On the suit" : "Hidden"} · tap the eye
+            </p>
           )}
         </motion.aside>
       )}
