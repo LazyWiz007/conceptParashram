@@ -61,10 +61,10 @@ export const TIERS: Tier[] = [
 ];
 
 export const TIER_PRICE: Record<Tier["id"], number> = {
-  title: 300000,
-  prime: 110000,
-  core: 75000,
-  support: 45000,
+  title: 60000,
+  prime: 22000,
+  core: 15000,
+  support: 9000,
 };
 
 export const SLOTS: Slot[] = [
@@ -72,7 +72,7 @@ export const SLOTS: Slot[] = [
     id: "chest_centre",
     label: "Centre chest",
     tier: "title",
-    price: 350000,
+    price: 70000,
     status: "open",
     size: "22 × 9 cm",
     pitch:
@@ -87,7 +87,7 @@ export const SLOTS: Slot[] = [
     id: "chest_band",
     label: "Chest band",
     tier: "prime",
-    price: 200000,
+    price: 40000,
     status: "open",
     size: "26 × 8 cm",
     pitch:
@@ -102,7 +102,7 @@ export const SLOTS: Slot[] = [
     id: "sleeve_left",
     label: "Left sleeve",
     tier: "core",
-    price: 75000,
+    price: 15000,
     status: "open",
     size: "8 × 7 cm",
     pitch:
@@ -117,7 +117,7 @@ export const SLOTS: Slot[] = [
     id: "sleeve_right",
     label: "Right sleeve",
     tier: "core",
-    price: 75000,
+    price: 15000,
     status: "open",
     size: "8 × 7 cm",
     pitch:
@@ -132,7 +132,7 @@ export const SLOTS: Slot[] = [
     id: "thigh_left",
     label: "Left thigh",
     tier: "prime",
-    price: 110000,
+    price: 22000,
     status: "open",
     size: "13 × 9 cm",
     pitch:
@@ -147,7 +147,7 @@ export const SLOTS: Slot[] = [
     id: "thigh_right",
     label: "Right thigh",
     tier: "prime",
-    price: 110000,
+    price: 22000,
     status: "open",
     size: "13 × 9 cm",
     pitch:
@@ -162,7 +162,7 @@ export const SLOTS: Slot[] = [
     id: "back_upper",
     label: "Upper back",
     tier: "title",
-    price: 300000,
+    price: 60000,
     status: "open",
     size: "24 × 14 cm",
     pitch:
@@ -177,7 +177,7 @@ export const SLOTS: Slot[] = [
     id: "back_lower",
     label: "Lower back",
     tier: "core",
-    price: 90000,
+    price: 18000,
     status: "open",
     size: "16 × 8 cm",
     pitch:
@@ -192,7 +192,7 @@ export const SLOTS: Slot[] = [
     id: "shoulder_left",
     label: "Left shoulder",
     tier: "support",
-    price: 50000,
+    price: 10000,
     status: "open",
     size: "9 × 5 cm",
     pitch:
@@ -207,7 +207,7 @@ export const SLOTS: Slot[] = [
     id: "shoulder_right",
     label: "Right shoulder",
     tier: "support",
-    price: 50000,
+    price: 10000,
     status: "open",
     size: "9 × 5 cm",
     pitch: "Mirror of the left shoulder. Sold as a pair if you want both.",
@@ -221,7 +221,7 @@ export const SLOTS: Slot[] = [
     id: "side_left",
     label: "Left side panel",
     tier: "support",
-    price: 45000,
+    price: 9000,
     status: "open",
     size: "8 × 22 cm",
     pitch:
@@ -236,7 +236,7 @@ export const SLOTS: Slot[] = [
     id: "side_right",
     label: "Right side panel",
     tier: "support",
-    price: 45000,
+    price: 9000,
     status: "open",
     size: "8 × 22 cm",
     pitch:
