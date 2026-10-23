@@ -62,9 +62,9 @@ export const TIERS: Tier[] = [
 
 export const TIER_PRICE: Record<Tier["id"], number> = {
   title: 60000,
-  prime: 22000,
+  prime: 25000,
   core: 15000,
-  support: 9000,
+  support: 10000,
 };
 
 export const SLOTS: Slot[] = [
@@ -72,7 +72,7 @@ export const SLOTS: Slot[] = [
     id: "chest_centre",
     label: "Centre chest",
     tier: "title",
-    price: 70000,
+    price: 75000,
     status: "open",
     size: "22 × 9 cm",
     pitch:
@@ -87,7 +87,7 @@ export const SLOTS: Slot[] = [
     id: "chest_band",
     label: "Chest band",
     tier: "prime",
-    price: 40000,
+    price: 45000,
     status: "open",
     size: "26 × 8 cm",
     pitch:
@@ -132,7 +132,7 @@ export const SLOTS: Slot[] = [
     id: "thigh_left",
     label: "Left thigh",
     tier: "prime",
-    price: 22000,
+    price: 25000,
     status: "open",
     size: "13 × 9 cm",
     pitch:
@@ -147,7 +147,7 @@ export const SLOTS: Slot[] = [
     id: "thigh_right",
     label: "Right thigh",
     tier: "prime",
-    price: 22000,
+    price: 25000,
     status: "open",
     size: "13 × 9 cm",
     pitch:
@@ -177,7 +177,7 @@ export const SLOTS: Slot[] = [
     id: "back_lower",
     label: "Lower back",
     tier: "core",
-    price: 18000,
+    price: 20000,
     status: "open",
     size: "16 × 8 cm",
     pitch:
@@ -189,39 +189,10 @@ export const SLOTS: Slot[] = [
     },
   },
   {
-    id: "shoulder_left",
-    label: "Left shoulder",
-    tier: "support",
-    price: 10000,
-    status: "open",
-    size: "9 × 5 cm",
-    pitch:
-      "Top of the shoulder. Small, but it is the one spot that stays in frame whether the camera is in front, beside or above you.",
-    anchor: {
-      position: [0.288, 1.082, 0.307],
-      rotation: [-0.517, 0.203, 0.114],
-      size: [0.28, 0.15, 0.8],
-    },
-  },
-  {
-    id: "shoulder_right",
-    label: "Right shoulder",
-    tier: "support",
-    price: 10000,
-    status: "open",
-    size: "9 × 5 cm",
-    pitch: "Mirror of the left shoulder. Sold as a pair if you want both.",
-    anchor: {
-      position: [-0.287, 1.085, 0.307],
-      rotation: [-0.528, -0.175, -0.101],
-      size: [0.28, 0.15, 0.8],
-    },
-  },
-  {
     id: "side_left",
     label: "Left side panel",
     tier: "support",
-    price: 9000,
+    price: 10000,
     status: "open",
     size: "8 × 22 cm",
     pitch:
@@ -236,7 +207,7 @@ export const SLOTS: Slot[] = [
     id: "side_right",
     label: "Right side panel",
     tier: "support",
-    price: 9000,
+    price: 10000,
     status: "open",
     size: "8 × 22 cm",
     pitch:
