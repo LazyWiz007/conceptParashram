@@ -137,7 +137,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         <p className="mt-1.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           {athlete.name} · {athlete.title}
         </p>
-        <p className="mt-2 max-w-[32ch] text-sm font-medium leading-relaxed text-[var(--ink)] [@media(max-height:620px)]:hidden">
+        <p className="mt-2 hidden max-w-[32ch] text-sm font-medium leading-relaxed text-[var(--ink)] sm:block [@media(max-height:620px)]:hidden">
           {openCount} places on the suit I will race {race.name} in. Spin it, pick one, put your
           logo on it.
         </p>
@@ -162,7 +162,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         )}
       </div>
 
-      <div className="absolute bottom-4 left-4 z-20 sm:bottom-6 sm:left-6">
+      <div className="absolute bottom-4 left-4 z-20 hidden sm:block sm:bottom-6 sm:left-6">
         <ActivityTicker />
       </div>
 
@@ -199,7 +199,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
 
       {/* Nothing to scroll to any more — this is the way into the slots. */}
       <div
-        className={`absolute bottom-[6.5rem] left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-2.5 transition-opacity duration-300 sm:bottom-6 ${
+        className={`absolute bottom-4 left-4 z-20 flex flex-col items-start gap-2.5 transition-opacity duration-300 sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:items-center ${
           focusedId || listOpen || aboutOpen ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
@@ -208,7 +208,7 @@ export function Studio({ slots, avatar }: { slots: Slot[]; avatar?: string | nul
         </span>
         <button
           onClick={() => setListOpen(true)}
-          className="whitespace-nowrap rounded-full border-4 border-[#0a0a0a] bg-[var(--cta)] px-8 py-3.5 text-[15px] font-bold text-[var(--cta-ink)] shadow-[0_0_34px_rgb(255_59_48/0.45)] transition hover:brightness-110 active:scale-[0.98]"
+          className="whitespace-nowrap rounded-full border-4 border-[#0a0a0a] bg-[var(--cta)] px-6 py-3.5 sm:px-8 text-[15px] font-bold text-[var(--cta-ink)] shadow-[0_0_34px_rgb(255_59_48/0.45)] transition hover:brightness-110 active:scale-[0.98]"
         >
           Get Your Logo
         </button>
