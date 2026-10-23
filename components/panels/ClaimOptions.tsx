@@ -3,6 +3,7 @@
 import { athlete, race } from "@/content/site";
 import { inr } from "@/lib/format";
 import type { Slot } from "@/lib/types";
+import { EnquiryForm } from "./EnquiryForm";
 
 /**
  * What "Claim your spot" opens. Two ways to reach a human rather than a form —
@@ -33,7 +34,7 @@ export function ClaimOptions({ slot, onBack }: { slot: Slot; onBack: () => void 
         and we&rsquo;ll take it from there — nothing is committed until you have an invoice.
       </p>
 
-      <div className="flex flex-col gap-3">
+      <div>
         <a
           href={athlete.instagram}
           target="_blank"
@@ -49,24 +50,26 @@ export function ClaimOptions({ slot, onBack }: { slot: Slot; onBack: () => void 
           Send a DM on Instagram
         </a>
 
-        <a
-          href={mailto}
-          className="flex items-center justify-center gap-2.5 rounded-lg border-2 border-[var(--line-strong)] px-4 py-4 text-base font-semibold text-[var(--ink)] transition hover:border-[var(--ink)] hover:bg-[rgb(255_255_255/0.08)]"
-        >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
-            <rect x="3" y="5" width="18" height="14" rx="2" />
-            <path d="M3 7l9 6 9-6" />
-          </svg>
-          Mail me
-        </a>
       </div>
+
+      <div className="flex items-center gap-3">
+        <span className="h-px flex-1 bg-[var(--line)]" />
+        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-[var(--ink-faint)]">
+          or leave your details
+        </span>
+        <span className="h-px flex-1 bg-[var(--line)]" />
+      </div>
+
+      <EnquiryForm slot={slot} />
 
       {/* spelled out so it can be copied by anyone whose mail client will not open */}
       <div className="rounded-lg border border-[var(--line)] bg-[rgb(255_255_255/0.03)] px-4 py-3 text-center">
         <p className="font-mono text-2xs uppercase tracking-[0.14em] text-[var(--ink-faint)]">
           Or write to
         </p>
-        <p className="mt-1 select-all text-sm text-[var(--ink)]">{athlete.email}</p>
+        <a href={mailto} className="mt-1 block text-sm text-[var(--ink)] underline-offset-4 hover:underline">
+          {athlete.email}
+        </a>
         <p className="mt-2 select-all font-mono text-2xs text-[var(--ink-faint)]">
           {athlete.handle}
         </p>

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { Resend } from "resend";
 import { athlete } from "@/content/site";
 import { inr } from "@/lib/format";
-import { countEnquiries, saveEnquiry } from "@/lib/db";
+import { countEnquiries, hasDb, saveEnquiry } from "@/lib/db";
 import { readSlots } from "@/lib/slotStore";
 
 export const dynamic = "force-dynamic";
@@ -47,8 +47,18 @@ const Enquiry = z.object({
   company: z.string().trim().min(1).max(120),
   contact: z.string().trim().min(1).max(80),
   email: z.string().trim().email().max(180),
-  phone: z.string().trim().max(40).optional().or(z.literal("")),
-  website: z.string().trim().max(200).optional().or(z.literal("")),
+  /**
+   * Indian mobile: ten digits starting 6-9, with an optional +91 or 0.
+   * Spaces, dashes and brackets are stripped before this runs, so a number
+   * pasted from a contact card still passes.
+   */
+  phone: z
+    .string()
+    .trim()
+    .transform((v) => v.replace(/[\s\-()]/g, ""))
+    .refine((v) => /^(?:\+?91|0)?[6-9]\d{9}$/.test(v), {
+      message: "Enter a 10-digit Indian mobile number",
+    }),
   message: z.string().trim().max(2000).optional().or(z.literal("")),
   /**
    * Honeypot. Deliberately permissive: a strict schema would reject the bot
@@ -145,13 +155,29 @@ export async function POST(req: Request) {
     return refuse(429, "A lot of enquiries are coming in right now. Please try again in an hour.");
   }
 
+  // With neither a database nor a mail sender configured, an enquiry would be
+  // written to a per-instance memory store that the next request will not see
+  // — i.e. silently lost while the visitor is told it sent. Refuse instead and
+  // point them at a channel that works.
+  const canEmail = Boolean(process.env.RESEND_API_KEY && process.env.ENQUIRY_FROM);
+  if (!hasDb && !canEmail) {
+    console.error("[enquiry] refused: no database and no mail sender configured");
+    return NextResponse.json(
+      {
+        error:
+          "The form is not able to reach Parashram right now. Please send a DM on Instagram or email him directly.",
+      },
+      { status: 503 },
+    );
+  }
+
   await saveEnquiry({
     slot_id: d.slotId,
     company: d.company,
     contact: d.contact,
     email,
     phone: d.phone || null,
-    website: d.website || null,
+    website: null,
     message: d.message || null,
   });
   console.info(`[enquiry] saved for ${slot.id}`);
@@ -164,9 +190,8 @@ export async function POST(req: Request) {
       `Slot:     ${slot.label} (${slot.tier}, ${inr(slot.price)})`,
       `Company:  ${d.company}`,
       `Contact:  ${d.contact}`,
+      `Phone:    ${d.phone}`,
       `Email:    ${email}`,
-      d.phone ? `Phone:    ${d.phone}` : null,
-      d.website ? `Website:  ${d.website}` : null,
       d.message ? `\n${d.message}` : null,
     ].filter(Boolean).join("\n");
 
